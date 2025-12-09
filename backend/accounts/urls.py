@@ -1,11 +1,9 @@
-from django.urls import path
-from . import views
+# accounts/urls.py
+from django.urls import path, include
 
 app_name = 'accounts'
 urlpatterns = [
-    path('index/', views.index, name='index'),
-    path('login/', views.login, name='login'),
-    path('logout/', views.logout, name='logout'),
-    path('signup/', views.signup, name='signup'),
-    path('deleta/', views.delete, name='delete'),
+    # 기존 views.login, views.signup 등은 삭제합니다.
+    path('', include('dj_rest_auth.urls')),
+    path('signup/', include('dj_rest_auth.registration.urls')),
 ]
