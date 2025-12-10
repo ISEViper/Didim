@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
 import HomeView from '@/views/HomeView.vue'
+import NaverCallbackView from '@/views/NaverCallbackView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: SignupView
+    },
+    {
+      path: '/oauth/naver/callback',
+      name: 'naver-callback',
+      component: NaverCallbackView
     }
   ]
 })

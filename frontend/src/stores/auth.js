@@ -70,5 +70,57 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { token, user, isAuthenticated, signUp, logIn, fetchUser, logOut }
+  // 네이버 로그인 시작 (로그인 페이지로 이동)
+  const naverLogin = () => {
+    const NAVER_CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID  // 여기에 네이버 Client ID
+    const redirectUri = encodeURIComponent('http://localhost:5173/oauth/naver/callback')
+    const state = Math.random().toString(36).substring(2, 15)
+  
+    // state를 localStorage에 저장 (CSRF 방지용)
+    localStorage.setItem('naver_oauth_state', state)
+  
+    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}`
+    
+    window.location.href = naverAuthUrl
+  }
+
+  // 네이버 콜백 처리
+  const naverCallback = async (code, state) => {
+    const savedState = localStorage.getItem('naver_oauth_state')
+    
+    if (state !== savedState) {
+      throw new Error('Invalid state')
+    }
+    
+    const response = await axios.post('/accounts/naver/callback/', {
+      code,
+      state
+    })
+    
+    // 토큰 저장
+    token.value = response.data.access
+    localStorage.setItem('token', response.data.access)
+    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`
+    
+    // 사용자 정보 저장
+    user.value = response.data.user
+    localStorage.setItem('user', JSON.stringify(response.data.user))
+    
+    // 상태 정보 제거
+    localStorage.removeItem('naver_oauth_state')
+    
+    return response.data
+  }
+
+  return {
+    token,
+    user,
+    isAuthenticated,
+    signUp,
+    logIn,
+    fetchUser,
+    logOut,
+    naverLogin,
+    naverCallback,
+  }
 })

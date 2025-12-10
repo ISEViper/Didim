@@ -23,6 +23,10 @@ const handleLogin = async () => {
     alert('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.')
   }
 }
+
+const handleNaverLogin = () => {
+  authStore.naverLogin()
+}
 </script>
 
 <template>
@@ -107,7 +111,7 @@ const handleLogin = async () => {
           <button class="w-12 h-12 rounded-xl bg-[#FEE500] text-[#000000] flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg active:scale-95">
             <span class="font-black text-xl">K</span>
           </button>
-          <button class="w-12 h-12 rounded-xl bg-[#03C75A] text-white flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg active:scale-95">
+          <button @click="handleNaverLogin" class="w-12 h-12 rounded-xl bg-[#03C75A] text-white flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg active:scale-95" title="네이버 로그인">
             <span class="font-black text-xl">N</span>
           </button>
         </div>

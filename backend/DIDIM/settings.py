@@ -1,4 +1,6 @@
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -118,4 +120,17 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SIGNUP_FIELDS = {
     "email": {"required": True},
+}
+
+load_dotenv()
+NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID", '')
+NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET", '')
+
+SOCIALACCOUNT_PROVIDERS = {
+    'naver': {
+        'APP': {
+            'client_id': NAVER_CLIENT_ID,
+            'secret': NAVER_CLIENT_SECRET,
+        }
+    }
 }
