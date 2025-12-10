@@ -1,30 +1,51 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useStockStore } from '@/stores/stock'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const stockStore = useStockStore()
 
 const searchQuery = ref('')
 
-// 로그인 상태 및 사용자 이름 (Pinia Store에서 가져옴)
-// 실제로는 authStore.user.last_name + authStore.user.first_name 등을 조합해야 합니다.
-// 지금은 DB에 저장된 이름을 가져오는 로직이 없으므로 임시로 '홍길동'으로 표시하거나 store에서 가져옵니다.
 const isLoggedIn = computed(() => authStore.isAuthenticated)
 const username = computed(() => authStore.user?.first_name ? `${authStore.user.last_name}${authStore.user.first_name}` : '홍길동')
 
+const handleInput = (e) => {
+  const keyword = e.target.value
+  searchQuery.value = keyword 
+  stockStore.searchStocks(keyword)
+}
+
+const handleEnter = (e) => {
+  if (e.isComposing) return 
+  
+  handleSearch()
+}
+
+const goToDetail = (ticker) => {
+  router.push(`/stock/${ticker}`)
+  searchQuery.value = ''
+  stockStore.searchResults = [] 
+}
+
 const handleSearch = () => {
   if (!searchQuery.value.trim()) return
-  alert(`'${searchQuery.value}' 검색 결과를 찾습니다.`)
-  // 나중에 검색 결과 페이지로 이동: router.push({ name: 'search', query: { q: searchQuery.value } })
+  
+  if (stockStore.searchResults.length > 0) {
+    goToDetail(stockStore.searchResults[0].ticker)
+  } else {
+    alert(`'${searchQuery.value}'에 대한 검색 결과가 없습니다.`)
+  }
 }
 
 const handleLogout = async () => {
   if(confirm("로그아웃 하시겠습니까?")) {
     await authStore.logOut()
     alert("로그아웃 되었습니다.")
-    router.go(0) // 페이지 새로고침
+    router.go(0) 
   }
 }
 </script>
@@ -37,7 +58,6 @@ const handleLogout = async () => {
     <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] -z-10 opacity-60"></div>
 
     <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0">
-      
       <div v-if="isLoggedIn" class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
         <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -75,20 +95,58 @@ const handleLogout = async () => {
       <div class="w-full max-w-2xl relative group mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
         <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
         
-        <div class="relative flex items-center bg-[#0f172a]/80 backdrop-blur-xl rounded-full border border-white/10 shadow-2xl">
+        <div class="relative flex items-center bg-[#0f172a]/80 backdrop-blur-xl rounded-full border border-white/10 shadow-2xl z-20">
           <span class="pl-6 text-gray-400">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </span>
           <input 
-            v-model="searchQuery"
-            @keyup.enter="handleSearch"
+            :value="searchQuery"
+            @input="handleInput"
+            @keyup.enter="handleEnter"
             type="text" 
             placeholder="종목명, 티커 검색..." 
             class="w-full py-5 px-4 bg-transparent text-white placeholder-gray-500 text-lg focus:outline-none rounded-full"
           />
         </div>
+
+        <div 
+          v-if="searchQuery && stockStore.searchResults.length > 0" 
+          class="absolute top-full left-0 w-full mt-4 bg-[#1e293b]/95 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden max-h-80 overflow-y-auto z-10 animate-in fade-in slide-in-from-top-2 duration-200"
+        >
+          <ul>
+            <li 
+              v-for="stock in stockStore.searchResults" 
+              :key="stock.ticker"
+              @click="goToDetail(stock.ticker)"
+              class="px-6 py-4 hover:bg-indigo-600/30 cursor-pointer border-b border-white/5 last:border-0 flex justify-between items-center transition-colors group/item"
+            >
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-300 font-bold text-xs">
+                  {{ stock.market_type === 'KOSPI' ? 'KP' : 'KD' }}
+                </div>
+                <div>
+                  <div class="font-bold text-white text-lg group-hover/item:text-indigo-300 transition-colors">
+                    {{ stock.name }}
+                  </div>
+                  <div class="text-xs text-gray-400 font-mono">{{ stock.ticker }}</div>
+                </div>
+              </div>
+              
+              <span v-if="stock.sector" class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-400 border border-white/5">
+                {{ stock.sector }}
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div 
+          v-else-if="searchQuery && stockStore.searchResults.length === 0"
+          class="absolute top-full left-0 w-full mt-4 bg-[#1e293b]/90 backdrop-blur-md rounded-2xl border border-white/10 p-4 text-center text-gray-400 text-sm z-10"
+        >
+          검색 결과가 없습니다.
+        </div>
+
       </div>
 
       <div class="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200 text-center">
