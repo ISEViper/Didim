@@ -3,25 +3,30 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useStockStore } from '@/stores/stock'
+import Sidebar from '@/components/SideBar.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const stockStore = useStockStore()
 
 const searchQuery = ref('')
+const isMenuOpen = ref(false)
 
 const isLoggedIn = computed(() => authStore.isAuthenticated)
 const username = computed(() => authStore.user?.first_name ? `${authStore.user.last_name}${authStore.user.first_name}` : '홍길동')
 
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
 const handleInput = (e) => {
   const keyword = e.target.value
-  searchQuery.value = keyword 
+  searchQuery.value = keyword
   stockStore.searchStocks(keyword)
 }
 
 const handleEnter = (e) => {
-  if (e.isComposing) return 
-  
+  if (e.isComposing) return
   handleSearch()
 }
 
@@ -33,7 +38,6 @@ const goToDetail = (ticker) => {
 
 const handleSearch = () => {
   if (!searchQuery.value.trim()) return
-  
   if (stockStore.searchResults.length > 0) {
     goToDetail(stockStore.searchResults[0].ticker)
   } else {
@@ -51,26 +55,27 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen flex flex-col relative overflow-hidden text-white font-pretendard">
+  <div class="w-full min-h-screen flex flex-col relative overflow-hidden text-primary font-pretendard transition-colors duration-300">
     
     <div class="absolute inset-0 animate-gradient-bg -z-10"></div>
-    <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] -z-10 opacity-60"></div>
-    <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] -z-10 opacity-60"></div>
+    
+    <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60 transition-opacity"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60 transition-opacity"></div>
 
     <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0">
       <div v-if="isLoggedIn" class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-        <button class="p-2 hover:bg-white/10 rounded-full transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <h2 class="text-lg md:text-xl font-bold tracking-tight">
+        <h2 class="text-lg md:text-xl font-bold tracking-tight text-primary">
           {{ username }}님, 안녕하세요.
         </h2>
       </div>
 
       <div v-else class="w-full flex justify-end gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-        <router-link to="/login" class="px-4 py-2 text-sm font-bold text-gray-300 hover:text-white transition-colors">
+        <router-link to="/login" class="px-4 py-2 text-sm font-bold text-secondary hover:text-primary transition-colors">
           로그인
         </router-link>
         <router-link to="/signup" class="px-5 py-2 text-sm font-bold bg-[#3b4cca] hover:bg-[#3241a8] text-white rounded-full transition-all shadow-lg shadow-indigo-500/30">
@@ -78,24 +83,27 @@ const handleLogout = async () => {
         </router-link>
       </div>
 
-      <button v-if="isLoggedIn" @click="handleLogout" class="text-sm text-gray-400 hover:text-white transition-colors ml-auto">
+      <button v-if="isLoggedIn" @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors ml-auto hidden md:block">
         로그아웃
       </button>
     </header>
 
+    <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
+
     <main class="flex-1 flex flex-col items-center justify-center w-full px-4 z-10 -mt-10">
       
       <div class="text-center mb-10 animate-in fade-in zoom-in duration-700">
-        <h1 class="text-6xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 drop-shadow-2xl mb-4">
+        <h1 class="text-6xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-indigo-900 to-indigo-600 dark:from-white dark:to-gray-400 drop-shadow-2xl mb-4">
           DIDIM
         </h1>
-        <p class="text-lg md:text-xl text-gray-300 font-medium">성공 투자를 위한 첫 디딤</p>
+        <p class="text-lg md:text-xl text-secondary font-medium">성공 투자를 위한 첫 디딤</p>
       </div>
 
       <div class="w-full max-w-2xl relative group mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-        <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
         
-        <div class="relative flex items-center bg-[#0f172a]/80 backdrop-blur-xl rounded-full border border-white/10 shadow-2xl z-20">
+        <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full blur opacity-0 dark:opacity-30 group-hover:opacity-60 transition duration-500"></div>
+        
+        <div class="relative flex items-center input-glass rounded-full shadow-xl z-20">
           <span class="pl-6 text-gray-400">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -104,49 +112,41 @@ const handleLogout = async () => {
           <input 
             :value="searchQuery"
             @input="handleInput"
-            @keyup.enter="handleEnter"
+            @keydown.enter="handleEnter"
             type="text" 
             placeholder="종목명, 티커 검색..." 
-            class="w-full py-5 px-4 bg-transparent text-white placeholder-gray-500 text-lg focus:outline-none rounded-full"
+            class="w-full py-5 px-4 bg-transparent text-primary placeholder-gray-400 text-lg focus:outline-none rounded-full"
           />
         </div>
 
         <div 
           v-if="searchQuery && stockStore.searchResults.length > 0" 
-          class="absolute top-full left-0 w-full mt-4 bg-[#1e293b]/95 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden max-h-80 overflow-y-auto z-10 animate-in fade-in slide-in-from-top-2 duration-200"
+          class="absolute top-full left-0 w-full mt-4 glass-panel rounded-2xl overflow-hidden max-h-80 overflow-y-auto z-10 animate-in fade-in slide-in-from-top-2 duration-200"
         >
           <ul>
             <li 
               v-for="stock in stockStore.searchResults" 
               :key="stock.ticker"
               @click="goToDetail(stock.ticker)"
-              class="px-6 py-4 hover:bg-indigo-600/30 cursor-pointer border-b border-white/5 last:border-0 flex justify-between items-center transition-colors group/item"
+              class="px-6 py-4 hover:bg-indigo-50 dark:hover:bg-indigo-600/30 cursor-pointer border-b border-gray-100 dark:border-white/5 last:border-0 flex justify-between items-center transition-colors group/item"
             >
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-300 font-bold text-xs">
+                <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-300 font-bold text-xs">
                   {{ stock.market_type === 'KOSPI' ? 'KP' : 'KD' }}
                 </div>
                 <div>
-                  <div class="font-bold text-white text-lg group-hover/item:text-indigo-300 transition-colors">
+                  <div class="font-bold text-primary group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-300 transition-colors">
                     {{ stock.name }}
                   </div>
-                  <div class="text-xs text-gray-400 font-mono">{{ stock.ticker }}</div>
+                  <div class="text-xs text-secondary font-mono">{{ stock.ticker }}</div>
                 </div>
               </div>
-              
-              <span v-if="stock.sector" class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-400 border border-white/5">
+              <span v-if="stock.sector" class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-secondary border border-gray-200 dark:border-white/5">
                 {{ stock.sector }}
               </span>
             </li>
           </ul>
         </div>
-        <div 
-          v-else-if="searchQuery && stockStore.searchResults.length === 0"
-          class="absolute top-full left-0 w-full mt-4 bg-[#1e293b]/90 backdrop-blur-md rounded-2xl border border-white/10 p-4 text-center text-gray-400 text-sm z-10"
-        >
-          검색 결과가 없습니다.
-        </div>
-
       </div>
 
       <div class="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200 text-center">
@@ -154,7 +154,7 @@ const handleLogout = async () => {
           <span class="mr-2">DIDIM AI 오늘의 추천 종목</span>
           <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
         </button>
-        <p class="mt-4 text-sm text-gray-500 font-light">Powered by Google Gemini</p>
+        <p class="mt-4 text-sm text-secondary font-light">Powered by Google Gemini</p>
       </div>
 
     </main>
