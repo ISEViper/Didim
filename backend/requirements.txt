@@ -6,7 +6,7 @@ colorama==0.4.6
 decorator==5.2.1
 dj-rest-auth==7.0.1
 Django==5.2.6
-django-allauth==65.13.1
+django-allauth==64.0.0
 django-cors-headers==4.9.0
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1

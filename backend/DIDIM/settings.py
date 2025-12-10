@@ -1,8 +1,9 @@
-from pathlib import Path
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = "django-insecure-gf*3pqan1f$tw+li%b)h$tf(11rdf151oslqd#$d205jao-h!$"
 DEBUG = True
@@ -10,6 +11,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'accounts',
+    'stocks',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
@@ -134,3 +136,4 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+KRX_API_KEY = os.getenv('KRX_API_KEY')
