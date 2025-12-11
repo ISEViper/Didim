@@ -63,18 +63,20 @@ const handleLogout = async () => {
     <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60 transition-opacity"></div>
 
     <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0">
-      <div v-if="isLoggedIn" class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+      
+      <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
         <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <h2 class="text-lg md:text-xl font-bold tracking-tight text-primary">
+        
+        <h2 v-if="isLoggedIn" class="text-lg md:text-xl font-bold tracking-tight text-primary">
           {{ username }}님, 안녕하세요.
         </h2>
       </div>
 
-      <div v-else class="w-full flex justify-end gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+      <div v-if="!isLoggedIn" class="flex justify-end gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
         <router-link to="/login" class="px-4 py-2 text-sm font-bold text-secondary hover:text-primary transition-colors">
           로그인
         </router-link>
@@ -83,7 +85,7 @@ const handleLogout = async () => {
         </router-link>
       </div>
 
-      <button v-if="isLoggedIn" @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors ml-auto hidden md:block">
+      <button v-else @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors hidden md:block animate-in fade-in slide-in-from-top-4 duration-500">
         로그아웃
       </button>
     </header>

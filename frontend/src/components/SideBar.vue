@@ -65,10 +65,21 @@ const handleLogout = async () => {
               </svg>
             </button>
           </div>
-          <div>
+          
+          <div v-if="authStore.isAuthenticated">
             <p class="text-lg font-bold text-gray-900 dark:text-white">{{ username }}님, 안녕하세요.</p>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">성공 투자를 응원합니다.</p>
           </div>
+          <div v-else>
+            <router-link to="/login" @click="emit('close')" class="text-lg font-bold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-2">
+              로그인을 진행해주세요
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </router-link>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">회원가입하고 더 많은 기능을 누려보세요.</p>
+          </div>
+
         </div>
 
         <nav class="flex-1 p-6 space-y-2 overflow-y-auto">
