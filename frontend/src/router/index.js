@@ -4,6 +4,7 @@ import SignupView from '@/views/SignupView.vue'
 import HomeView from '@/views/HomeView.vue'
 import StockDetailView from '@/views/StockDetailView.vue'
 import NaverCallbackView from '@/views/NaverCallbackView.vue'
+import WatchlistView from '@/views/WatchlistView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/stock/:ticker', 
       name: 'stock-detail',
       component: StockDetailView
+    },
+    {
+      path: '/watchlist',
+      name:'watchlist',
+      component: WatchlistView
     }
   ]
 })

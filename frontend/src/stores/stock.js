@@ -5,8 +5,9 @@ import axios from 'axios'
 export const useStockStore = defineStore('stock', () => {
   const searchResults = ref([]) // 검색 결과 리스트
   const currentStock = ref(null) // 현재 보고 있는 종목 상세 정보
+  const myWatchlist = ref([]) // 관심종목 리스트
 
-  // 1. 주식 검색 액션
+  // 주식 검색
   const searchStocks = async (query) => {
     if (!query) {
       searchResults.value = []
@@ -20,7 +21,7 @@ export const useStockStore = defineStore('stock', () => {
     }
   }
 
-  // 2. 주식 상세 정보 가져오기 액션
+  // 주식 상세 정보 가져오기
   const getStockDetail = async (ticker) => {
     try {
       const res = await axios.get(`stocks/${ticker}/`)
@@ -30,5 +31,36 @@ export const useStockStore = defineStore('stock', () => {
     }
   }
 
-  return { searchResults, currentStock, searchStocks, getStockDetail }
+  
+  const fetchWatchlist = async () => {
+    try {
+      const res = await axios.get('stocks/watchlist/')
+      myWatchlist.value = res.data
+    } catch (err) {
+      console.error('관심종목 로드 실패: ', err)
+    }
+  }
+
+  // 관심종목 삭제하기
+  const removeFromWatchlist = async (ticker) => {
+    try {
+      await axios.delete(`stocks/watchlist/${ticker}/`)
+      // 목록에서 즉시 제거 (새로고침 없이 반영)
+      myWatchlist.value = myWatchlist.value.filter(item => item.stock.ticker !== ticker)
+    } catch (err) {
+      console.error('삭제 실패:', err)
+    }
+  }
+
+  // 관심종목 추가하기 (나중에 상세페이지 하트 버튼용)
+  const addToWatchlist = async (ticker) => {
+    try {
+      await axios.post('stocks/watchlist/', { ticker })
+      await fetchWatchlist() // 목록 갱신
+    } catch (err) {
+      console.error('추가 실패:', err)
+    }
+  }
+
+  return { searchResults, currentStock, myWatchlist, searchStocks, getStockDetail, fetchWatchlist, removeFromWatchlist, addToWatchlist }
 })

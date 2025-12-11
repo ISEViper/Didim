@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # 한국주식(KRX) 및 ETF 기본 정보 담는 모델
 class Stock(models.Model):
@@ -39,3 +40,12 @@ class DailyPrice(models.Model):
 
     def __str__(self):
         return f'{self.stock.name} - {self.date}'
+    
+class Watchlist(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='watchlist')
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name='watched_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'stock')
+        ordering=['-created_at']

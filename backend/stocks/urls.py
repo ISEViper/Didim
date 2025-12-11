@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import StockSearchView, StockDetailView
+from . import views
 
 app_name = 'stocks'
 
 urlpatterns = [
-    path('search/', StockSearchView.as_view(), name='stock-search'),
-    path('<str:ticker>/', StockDetailView.as_view(), name='stock-detail'),
+    path('search/', views.stock_search, name='stock-search'),
+    path('watchlist/', views.watchlist_list, name='watchlist-list'), 
+    path('watchlist/<str:ticker>/', views.watchlist_detail, name='watchlist-delete'),
+    path('<str:ticker>/', views.stock_detail, name='stock-detail'),
 ]
