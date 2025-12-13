@@ -27,6 +27,7 @@ class DailyPrice(models.Model):
     high_price = models.BigIntegerField()
     low_price = models.BigIntegerField()
     close_price = models.BigIntegerField()
+    fluctuation_rate = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
     volume = models.BigIntegerField()
     trading_value = models.BigIntegerField(null=True, blank=True)
     change = models.BigIntegerField(null=True, blank=True)

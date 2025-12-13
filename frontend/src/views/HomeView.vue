@@ -14,6 +14,7 @@ const isMenuOpen = ref(false)
 
 const isLoggedIn = computed(() => authStore.isAuthenticated)
 const username = computed(() => authStore.user?.first_name ? `${authStore.user.last_name}${authStore.user.first_name}` : '홍길동')
+const formatNum = (num) => num?.toLocaleString() || '-'
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
@@ -51,6 +52,13 @@ const handleLogout = async () => {
     alert("로그아웃 되었습니다.")
     router.go(0) 
   }
+}
+
+const getPriceColor = (change) => {
+  if (!change) return 'text-secondary'
+  if (change > 0) return 'text-rose-500 dark:text-rose-400'
+  if (change < 0) return 'text-blue-600 dark:text-blue-400'
+  return 'text-secondary'
 }
 </script>
 
@@ -143,9 +151,14 @@ const handleLogout = async () => {
                   <div class="text-xs text-secondary font-mono">{{ stock.ticker }}</div>
                 </div>
               </div>
-              <span v-if="stock.sector" class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-secondary border border-gray-200 dark:border-white/5">
-                {{ stock.sector }}
-              </span>
+              <div class="text-right ml-4 shrink-0" v-if="stock.latest_price">
+                <div class="font-bold text-primary text-sm">
+                  {{ formatNum(stock.latest_price.close_price) }}원
+                </div>
+                <div class="text-xs font-medium mt-0.5" :class="getPriceColor(stock.latest_price.change)">
+                  {{ stock.latest_price.change > 0 ? '+' : '' }}{{ stock.latest_price.fluctuation_rate }}%
+                </div>
+              </div>
             </li>
           </ul>
         </div>

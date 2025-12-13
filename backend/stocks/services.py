@@ -44,6 +44,7 @@ def save_data(items, date_obj, asset_type):
             # 2. DailyPrice 정보 파싱 
             trading_value = clean_int(item.get("ACC_TRDVAL"))
             change = clean_int(item.get("CMPPREVDD_PRC"))
+            fluctuation_rate = clean_float(item.get("FLUC_RT"))
             nav = clean_float(item.get("NAV")) if asset_type == 'ETF' else None
 
             # DB 저장 (DailyPrice)
@@ -56,6 +57,7 @@ def save_data(items, date_obj, asset_type):
                     'high_price': clean_int(item.get("TDD_HGPRC")),
                     'low_price': clean_int(item.get("TDD_LWPRC")),
                     'volume': clean_int(item.get("ACC_TRDVOL")),
+                    'fluctuation_rate': fluctuation_rate,
                     'trading_value': trading_value, 
                     'change': change,               
                     'nav': nav
