@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Stock, DailyPrice, Watchlist
+from .models import Stock, DailyPrice, Watchlist, Chartprice
 
 # 1. 일별 시세 정보 Serializer
 class DailyPriceSerializer(serializers.ModelSerializer):
@@ -28,3 +28,9 @@ class WatchlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Watchlist
         fields = ['id', 'stock', 'created_at']
+
+# 4. 주식 차트 가격 Serializer
+class ChartpriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chartprice
+        fields = ['date', 'close_price']

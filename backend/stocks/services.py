@@ -1,7 +1,8 @@
 import requests
-from datetime import datetime
+import FinanceDataReader as fdr
+from datetime import datetime, timedelta
 from django.conf import settings
-from .models import Stock, DailyPrice
+from .models import Stock, DailyPrice, Chartprice
 
 # 1. KRX API URL
 STOCK_API_URL = "https://data-dbg.krx.co.kr/svc/apis/sto/stk_bydd_trd"
@@ -106,3 +107,39 @@ def fetch_krx_data(date_str):
         print(f"[ETF] 에러: {e}")
         
     print("=== 수집 종료 ===")
+
+def update_chart_data(ticker, period_year=5):
+    try:
+        stock = Stock.objects.get(ticker=ticker)
+    except Stock.DoesNotExist:
+        return
+
+    Chartprice.objects.filter(stock=stock).delete()
+
+    end_date = datetime.now().date()
+    start_date = end_date - timedelta(days=365 * period_year)
+    try:
+        df = fdr.DataReader(ticker, start_date)
+    except Exception as e:
+        print(f"⚠️ {stock.name}({ticker}) 데이터 수집 실패: 라이브러리 에러 - {e}")
+        return
+
+    if df.empty:
+        print(f"⚠️ {stock.name}({ticker}) 데이터 없음 (Empty)")
+        return
+
+    chart_prices = []
+    
+    try:
+        for date, row in df.iterrows():
+            chart_prices.append(Chartprice(
+                stock=stock,
+                date=date.date(),
+                close_price=int(row['Close'])
+            ))
+
+        Chartprice.objects.bulk_create(chart_prices)
+        print(f"{stock.name} 업데이트 완료")
+        
+    except Exception as e:
+        print(f"{stock.name} DB 저장 실패: {e}")

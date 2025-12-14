@@ -50,3 +50,12 @@ class Watchlist(models.Model):
     class Meta:
         unique_together = ('user', 'stock')
         ordering=['-created_at']
+
+class Chartprice(models.Model):
+    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name='chart_price')
+    date = models.DateField(db_index=True)
+    close_price = models.IntegerField()
+
+    class Meta:
+        ordering = ['date']
+        unique_together = ('stock', 'date')
