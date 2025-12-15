@@ -1,6 +1,9 @@
-from datetime import timedelta
+import requests
+import re
+from datetime import timedelta, datetime
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from django.conf import settings
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -101,7 +104,7 @@ def stock_chart_data(request, ticker):
     else: # 전체
         start_date = end_date - relativedelta(years=10)
 
-    # 2. DB에서 해당 기간 데이터만 조회 (최적화)
+    # DB에서 해당 기간 데이터만 조회 (최적화)
     data = Chartprice.objects.filter(
         stock__ticker=ticker,
         date__gte=start_date,
@@ -109,3 +112,55 @@ def stock_chart_data(request, ticker):
     ).values('date', 'close_price').order_by('date')
 
     return Response(data)
+
+# 6. 주식 관련 뉴스 불러오기
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def stock_news(request, ticker):
+    try:
+        stock = Stock.objects.get(ticker=ticker)
+        query = stock.name
+    except Stock.DoesNotExist:
+        return Response({'error': 'Stock not found'}, status=404)
+    
+    client_id = settings.NAVER_CLIENT_ID
+    client_secret = settings.NAVER_CLIENT_SECRET
+    
+    url = "https://openapi.naver.com/v1/search/news.json"
+    headers = {
+        "X-Naver-Client-Id": client_id,
+        "X-Naver-Client-Secret": client_secret,
+    }
+    params = {
+        "query": query,
+        "display": 20,
+        "sort":"date"
+    }
+
+    res = requests.get(url, headers=headers, params=params)
+
+    if res.status_code != 200:
+        return Response({'error': 'Naver API Error'}, status=500)
+    
+    items = res.json().get('items', [])
+    news_list = []
+
+    for item in items:
+        title = re.sub('<[^<]+?>', '', item['title'])
+        title = title.replace('&quot;', '"').replace('&amp;', '&')
+
+        try:
+            raw_date = item['pubDate']
+            dt = datetime.striptime(raw_date, '%a, %d %b %Y %H:%M:%S +0900')
+            formatted_date = dt.strfttime('%m.%d %H:%M')
+        except:
+            formatted_date = item['pubDate']
+
+        news_list.append({
+            'title': title,
+            'link': item['link'],
+            'date': formatted_date,
+            'publisher': '네이버뉴스'
+        })
+    
+    return Response(news_list)

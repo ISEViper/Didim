@@ -8,5 +8,6 @@ urlpatterns = [
     path('watchlist/', views.watchlist_list, name='watchlist-list'), 
     path('watchlist/<str:ticker>/', views.watchlist_detail, name='watchlist-delete'),
     path('<str:ticker>/chart/', views.stock_chart_data, name='stock-chart'),
+    path('<str:ticker>/news/', views.stock_news, name='stock-news'),
     path('<str:ticker>/', views.stock_detail, name='stock-detail'),
 ]
