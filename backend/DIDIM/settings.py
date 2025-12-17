@@ -64,6 +64,7 @@ REST_AUTH = {
     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
     # 로그인 시 'email' 필드를 받도록 명시
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserProfileSerializer',
 }
 
 ROOT_URLCONF = "DIDIM.urls"
@@ -137,3 +138,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 KRX_API_KEY = os.getenv('KRX_API_KEY')
+
+# 미디어 파일 설정(프로필 이미지 등)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

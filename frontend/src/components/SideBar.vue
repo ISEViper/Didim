@@ -14,7 +14,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const themeStore = useThemeStore()
 
-const username = computed(() => authStore.user?.first_name ? `${authStore.user.last_name}${authStore.user.first_name}` : '홍길동')
+const username = computed(() => authStore.user?.nickname || `${authStore.user?.last_name || ''}${authStore.user?.first_name || ''}` || '사용자')
 
 const handleLogout = async () => {
   if(confirm("로그아웃 하시겠습니까?")) {
@@ -116,12 +116,18 @@ const handleLogout = async () => {
               관심종목
             </router-link>
 
-            <a href="#" class="flex items-center gap-4 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl font-medium transition-colors">
+            <router-link
+              :to="authStore.isAuthenticated ? '/account' : '/login'"
+              @click="emit('close')"
+              class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
+              active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
+              :class="$route.path.includes('/account') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               계정 관리
-            </a>
+            </router-link>
           </nav>
 
         <div class="p-6 border-t border-gray-200 dark:border-white/5 space-y-3">

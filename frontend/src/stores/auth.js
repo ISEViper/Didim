@@ -14,12 +14,12 @@ export const useAuthStore = defineStore('auth', () => {
 
 
   const signUp = async (payload) => {
-    try {
-      const res = await axios.post('/accounts/signup/', payload)
-      return res.data
-    } catch (err) {
-      throw err
-    }
+    const config = payload instanceof FormData
+      ? { headers: { 'Content-Type': 'multipart/form-data' } }
+      : {}
+
+    const res = await axios.post('/accounts/signup/', payload, config)
+    return res.data
   }
 
   // 4. 액션 - 로그인

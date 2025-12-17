@@ -5,6 +5,10 @@ import HomeView from '@/views/HomeView.vue'
 import StockDetailView from '@/views/StockDetailView.vue'
 import NaverCallbackView from '@/views/NaverCallbackView.vue'
 import WatchlistView from '@/views/WatchlistView.vue'
+import AccountMainView from '@/views/AccountMainView.vue'
+import PasswordConfirmView from '@/views/PasswordConfirmView.vue'
+import AccountView from '@/views/AccountView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +42,21 @@ const router = createRouter({
       path: '/watchlist',
       name:'watchlist',
       component: WatchlistView
+    },
+    {
+      path: '/account',
+      name: 'account-main',
+      component: AccountMainView
+    },
+        {
+      path: '/account/confirm',
+      name: 'password-confirm',
+      component: PasswordConfirmView
+    },
+    {
+      path: '/account/edit',
+      name: 'account-edit',
+      component: AccountView
     }
   ]
 })

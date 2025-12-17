@@ -7,13 +7,26 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
+from .serializers import UserProfileSerializer, UserProfileUpdateSerializer
 
 User = get_user_model()
-
 
 class NaverCallbackView(APIView):
     """프론트에서 받은 네이버 code로 로그인 처리"""
     permission_classes = [AllowAny]
+
+    def generate_unique_nickname(self, base_nickname):
+        """닉네임 중복 제한 설정"""
+        nickname = base_nickname
+        counter = 1
+
+        while User.objects.filter(nickname=nickname).exists():
+            nickname = f"{base_nickname}_{counter}"
+            counter += 1
+
+        return nickname
     
     def post(self, request):
         code = request.data.get('code')
@@ -53,6 +66,7 @@ class NaverCallbackView(APIView):
         naver_id = naver_data.get('id')
         email = naver_data.get('email')
         name = naver_data.get('name', '')
+        profile_image = naver_data.get('profile_image', '')
         
         # 3. 기존 소셜 계정 확인 또는 신규 생성
         try:
@@ -67,10 +81,12 @@ class NaverCallbackView(APIView):
                 user = User.objects.get(email=email)
             except User.DoesNotExist:
                 # 신규 유저 생성
+                unique_nickname = self.generate_unique_nickname(name) if name else f"user_{naver_id[:8]}"
                 user = User.objects.create_user(
                     username=f'naver_{naver_id}',
                     email=email,
                     first_name=name,
+                    nickname=unique_nickname,
                 )
             
             # 소셜 계정 연결
@@ -92,5 +108,58 @@ class NaverCallbackView(APIView):
                 'email': user.email,
                 'first_name': user.first_name,
                 'last_name': user.last_name,
+                'nickname': user.nickname,
+                'profile_image_url': user.get_profile_image_url(),
+                'display_initial': user.get_display_initial(),
             }
         })
+    
+class ProfileView(APIView):
+    """프로필 조회 및 수정 API"""
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request):
+        """프로필 조회"""
+        serializer = UserProfileSerializer(request.user, context={'request': request})
+        return Response(serializer.data)
+    
+    def patch(self, request):
+        """프로필 수정(닉네임, 프로필 이미지)"""
+        serializer = UserProfileUpdateSerializer(
+            request.user,
+            data=request.data,
+            partial=True,
+            context={'request': request}
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            profile_serializer = UserProfileSerializer(request.user, context={'request': request})
+            return Response(profile_serializer.data)
+        return Response(serializer.errors, status=400)
+        
+    def delete(self, request):
+        """프로필 이미지 삭제"""
+        user = request.user
+        if user.profile_image:
+            user.profile_image.delete()
+            user.profile_image = None
+            user.save()
+        return Response({'message': '프로필 이미지가 삭제되었습니다.'})
+    
+class PasswordVerifyView(APIView):
+    """비밀번호 확인 API (정보 수정 전 본인 확인용)"""
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        password = request.data.get('password')
+        
+        if not password:
+            return Response({'error': '비밀번호를 입력해주세요.'}, status=400)
+        
+        # 비밀번호 확인
+        if request.user.check_password(password):
+            return Response({'message': '비밀번호가 확인되었습니다.'})
+        else:
+            return Response({'error': '비밀번호가 올바르지 않습니다.'}, status=400)

@@ -13,7 +13,7 @@ const searchQuery = ref('')
 const isMenuOpen = ref(false)
 
 const isLoggedIn = computed(() => authStore.isAuthenticated)
-const username = computed(() => authStore.user?.first_name ? `${authStore.user.last_name}${authStore.user.first_name}` : '홍길동')
+const username = computed(() => authStore.user?.nickname || `${authStore.user?.last_name || ''}${authStore.user?.first_name || ''}` || '사용자')
 const formatNum = (num) => num?.toLocaleString() || '-'
 
 const toggleMenu = () => {
