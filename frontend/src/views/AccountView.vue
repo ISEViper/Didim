@@ -3,12 +3,19 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
+import Sidebar from '@/components/SideBar.vue' // [필수] 사이드바 추가
 
 const router = useRouter()
 const authStore = useAuthStore()
 
 // 탭 상태: 'profile' | 'password'
 const activeTab = ref('profile')
+
+// 사이드바 상태
+const isMenuOpen = ref(false)
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
 
 // 프로필 데이터
 const profile = ref({
@@ -21,9 +28,7 @@ const profile = ref({
 })
 
 // 수정용 데이터
-const editForm = ref({
-  nickname: ''
-})
+const editForm = ref({ nickname: '' })
 
 // 프로필 이미지 관련
 const newProfileImage = ref(null)
@@ -102,7 +107,6 @@ const removeImage = async () => {
       newProfileImage.value = null
       if (fileInput.value) fileInput.value.value = ''
       
-      // 유저 정보 갱신
       await authStore.fetchUser()
       alert('프로필 이미지가 삭제되었습니다.')
     } catch (err) {
@@ -132,18 +136,14 @@ const saveProfile = async () => {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
 
-    // 프로필 정보 업데이트
     profile.value.nickname = res.data.nickname
     profile.value.profileImageUrl = res.data.profile_image_url
     profile.value.displayInitial = res.data.display_initial
     
-    // 새 이미지 상태 초기화
     newProfileImage.value = null
     profileImagePreview.value = null
     
-    // store의 user 정보도 갱신
     await authStore.fetchUser()
-    
     alert('프로필이 수정되었습니다.')
   } catch (err) {
     console.error('프로필 수정 실패:', err)
@@ -208,28 +208,41 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+  <div class="w-full min-h-screen flex flex-col relative overflow-hidden text-primary font-pretendard transition-colors duration-300">
     
-    <!-- 헤더 -->
-    <header class="w-full p-6 md:p-8 flex justify-between items-center">
-      <h1 class="text-2xl md:text-3xl font-black text-primary tracking-tight">DIDIM</h1>
-      <router-link to="/" class="text-sm text-secondary hover:text-primary transition-colors flex items-center gap-1 group">
-        <span class="group-hover:-translate-x-1 transition-transform">←</span> 메인으로 돌아가기
-      </router-link>
+    <div class="absolute inset-0 animate-gradient-bg -z-10"></div>
+    <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60 transition-opacity"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60 transition-opacity"></div>
+
+    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0">
+      <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+        <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-white dark:to-gray-400 tracking-tight">DIDIM</h1>
+      </div>
+
+      <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+        <router-link to="/account" class="text-sm text-secondary hover:text-primary transition-colors flex items-center gap-1 group">
+          <span class="group-hover:-translate-x-1 transition-transform">←</span> 마이페이지
+        </router-link>
+      </div>
     </header>
 
-    <!-- 메인 컨텐츠 -->
-    <main class="max-w-2xl mx-auto px-4 pb-12">
-      <div class="glass-panel rounded-[2rem] shadow-2xl overflow-hidden">
+    <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
+
+    <main class="flex-1 w-full max-w-2xl mx-auto px-4 pt-32 pb-12 z-10">
+      <div class="glass-panel rounded-[2rem] shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700">
         
-        <!-- 탭 헤더 -->
-        <div class="flex border-b border-line">
+        <div class="flex border-b border-gray-100 dark:border-white/5">
           <button
             @click="activeTab = 'profile'"
             :class="[
               'flex-1 py-4 px-6 text-sm font-medium transition-colors flex items-center justify-center gap-2',
               activeTab === 'profile' 
-                ? 'text-primary border-b-2 border-indigo-500 bg-indigo-500/5' 
+                ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/10' 
                 : 'text-secondary hover:text-primary'
             ]"
           >
@@ -244,7 +257,7 @@ onMounted(() => {
             :class="[
               'flex-1 py-4 px-6 text-sm font-medium transition-colors flex items-center justify-center gap-2',
               activeTab === 'password' 
-                ? 'text-primary border-b-2 border-indigo-500 bg-indigo-500/5' 
+                ? 'text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/10' 
                 : 'text-secondary hover:text-primary'
             ]"
           >
@@ -256,17 +269,14 @@ onMounted(() => {
           </button>
         </div>
 
-        <!-- 로딩 상태 -->
         <div v-if="isLoading" class="p-12 text-center">
           <div class="animate-spin w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full mx-auto"></div>
           <p class="text-secondary mt-4">로딩 중...</p>
         </div>
 
-        <!-- 프로필 수정 탭 -->
         <div v-else-if="activeTab === 'profile'" class="p-6 md:p-8">
           <div class="flex flex-col md:flex-row gap-8">
             
-            <!-- 프로필 이미지 영역 -->
             <div class="flex flex-col items-center">
               <div class="relative group">
                 <div 
@@ -284,7 +294,6 @@ onMounted(() => {
                   </span>
                 </div>
                 
-                <!-- 카메라 아이콘 -->
                 <div 
                   class="absolute bottom-1 right-1 w-9 h-9 bg-indigo-500 hover:bg-indigo-600 rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-colors"
                   @click="fileInput?.click()"
@@ -304,7 +313,6 @@ onMounted(() => {
                 @change="handleImageSelect"
               >
               
-              <!-- 이미지 관리 버튼 -->
               <div class="flex gap-2 mt-4">
                 <button
                   type="button"
@@ -324,9 +332,7 @@ onMounted(() => {
               </div>
             </div>
 
-            <!-- 정보 입력 영역 -->
             <div class="flex-1 space-y-4">
-              <!-- 이름 (읽기 전용) -->
               <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-1.5">
                   <label class="text-xs font-medium text-secondary ml-1">이름</label>
@@ -348,7 +354,6 @@ onMounted(() => {
                 </div>
               </div>
 
-              <!-- 이메일 (읽기 전용) -->
               <div class="space-y-1.5">
                 <label class="text-xs font-medium text-secondary ml-1">이메일</label>
                 <input 
@@ -359,7 +364,6 @@ onMounted(() => {
                 >
               </div>
 
-              <!-- 닉네임 (수정 가능) -->
               <div class="space-y-1.5">
                 <label class="text-xs font-medium text-secondary ml-1">닉네임</label>
                 <input 
@@ -371,7 +375,6 @@ onMounted(() => {
                 >
               </div>
 
-              <!-- 저장 버튼 -->
               <button
                 @click="saveProfile"
                 :disabled="isSaving"
@@ -383,7 +386,6 @@ onMounted(() => {
           </div>
         </div>
 
-        <!-- 비밀번호 변경 탭 -->
         <div v-else-if="activeTab === 'password'" class="p-6 md:p-8">
           <div class="max-w-md mx-auto space-y-4">
             <div class="space-y-1.5">
