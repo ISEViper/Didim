@@ -14,7 +14,22 @@ const router = useRouter()
 const authStore = useAuthStore()
 const themeStore = useThemeStore()
 
-const username = computed(() => authStore.user?.nickname || `${authStore.user?.last_name || ''}${authStore.user?.first_name || ''}` || '사용자')
+// 유저 객체 편의상 변수화
+const user = computed(() => authStore.user)
+
+// 닉네임 표시 로직
+const username = computed(() => user.value?.nickname || `${user.value?.last_name || ''}${user.value?.first_name || ''}` || '사용자')
+
+// [추가] 프로필 이미지 URL
+const profileImageUrl = computed(() => user.value?.profile_image_url || null)
+
+// [추가] 이미지가 없을 때 보여줄 이니셜
+const displayInitial = computed(() => {
+  if (user.value?.display_initial) return user.value.display_initial
+  if (user.value?.first_name) return user.value.first_name[0].toUpperCase()
+  if (user.value?.nickname) return user.value.nickname[0].toUpperCase()
+  return '?'
+})
 
 const handleLogout = async () => {
   if(confirm("로그아웃 하시겠습니까?")) {
@@ -57,7 +72,7 @@ const handleLogout = async () => {
       >
         
         <div class="p-8 border-b border-gray-200 dark:border-white/5">
-          <div class="flex justify-between items-start mb-6">
+          <div class="flex justify-between items-start mb-8">
             <h1 class="text-3xl font-black tracking-tighter text-indigo-900 dark:text-white">DIDIM</h1>
             <button @click="emit('close')" class="text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors transform hover:rotate-90 duration-200">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -66,10 +81,26 @@ const handleLogout = async () => {
             </button>
           </div>
           
-          <div v-if="authStore.isAuthenticated">
-            <p class="text-lg font-bold text-gray-900 dark:text-white">{{ username }}님, 안녕하세요.</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">성공 투자를 응원합니다.</p>
+          <div v-if="authStore.isAuthenticated" class="flex items-center gap-4">
+            
+            <div class="w-14 h-14 rounded-full overflow-hidden bg-indigo-600 flex items-center justify-center shrink-0 ring-4 ring-indigo-50 dark:ring-white/5">
+              <img 
+                v-if="profileImageUrl" 
+                :src="profileImageUrl" 
+                alt="프로필" 
+                class="w-full h-full object-cover"
+              >
+              <span v-else class="text-xl font-bold text-white">
+                {{ displayInitial }}
+              </span>
+            </div>
+
+            <div>
+              <p class="text-lg font-bold text-gray-900 dark:text-white leading-tight mb-1">{{ username }}님,</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">성공 투자를 응원합니다.</p>
+            </div>
           </div>
+
           <div v-else>
             <router-link to="/login" @click="emit('close')" class="text-lg font-bold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-2">
               로그인을 진행해주세요
@@ -81,7 +112,8 @@ const handleLogout = async () => {
           </div>
 
         </div>
-          <nav class="flex-1 p-6 space-y-2 overflow-y-auto">
+
+        <nav class="flex-1 p-6 space-y-2 overflow-y-auto">
             
             <router-link 
               to="/" 
@@ -128,7 +160,7 @@ const handleLogout = async () => {
               </svg>
               계정 관리
             </router-link>
-          </nav>
+        </nav>
 
         <div class="p-6 border-t border-gray-200 dark:border-white/5 space-y-3">
           

@@ -47,7 +47,13 @@ const handleLogout = async () => {
 
 // 정보 수정 클릭 → 비밀번호 확인 페이지로 이동
 const goToPasswordConfirm = () => {
-  router.push('/account/confirm')
+  if(!user.value?.has_password) {
+    router.push('/account/edit')
+  }
+
+  else {
+    router.push('/account/confirm')
+  }
 }
 
 // 로그인 체크 및 유저 정보 갱신

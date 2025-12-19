@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
-import Sidebar from '@/components/SideBar.vue' // [필수] 사이드바 추가
+import Sidebar from '@/components/SideBar.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -16,6 +16,10 @@ const isMenuOpen = ref(false)
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
+
+// [핵심] 비밀번호 보유 여부 확인 (소셜 로그인 유저는 false가 됨)
+// 백엔드 UserSerializer에서 has_password 필드를 보내준다고 가정
+const hasPassword = computed(() => authStore.user?.has_password ?? true)
 
 // 프로필 데이터
 const profile = ref({
@@ -252,7 +256,9 @@ onMounted(() => {
             </svg>
             프로필 수정
           </button>
+
           <button
+            v-if="hasPassword"
             @click="activeTab = 'password'"
             :class="[
               'flex-1 py-4 px-6 text-sm font-medium transition-colors flex items-center justify-center gap-2',
@@ -386,7 +392,7 @@ onMounted(() => {
           </div>
         </div>
 
-        <div v-else-if="activeTab === 'password'" class="p-6 md:p-8">
+        <div v-else-if="activeTab === 'password' && hasPassword" class="p-6 md:p-8">
           <div class="max-w-md mx-auto space-y-4">
             <div class="space-y-1.5">
               <label class="text-xs font-medium text-secondary ml-1">현재 비밀번호</label>
@@ -432,5 +438,6 @@ onMounted(() => {
 
       </div>
     </main>
+
   </div>
 </template>

@@ -46,6 +46,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     
 class UserProfileSerializer(serializers.ModelSerializer):
     """프로필 조회용 시리얼라이저"""
+    has_password = serializers.SerializerMethodField()
     profile_image_url = serializers.SerializerMethodField()
     display_initial = serializers.SerializerMethodField()
 
@@ -60,6 +61,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'profile_image',
             'profile_image_url',
             'display_initial',
+            'has_password',
         ]
         read_only_fields = ['pk', 'email', 'first_name', 'last_name']
 
@@ -73,6 +75,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_display_initial(self, obj):
         return obj.get_display_initial()
+    
+    def get_has_password(self, obj):
+        return obj.has_usable_password()
 
 
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
