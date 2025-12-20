@@ -12,6 +12,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'accounts',
     'stocks',
+    'ai',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
@@ -138,6 +139,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 KRX_API_KEY = os.getenv('KRX_API_KEY')
+GMS_API_KEY = os.getenv('GMS_API_KEY')
 
 # 미디어 파일 설정(프로필 이미지 등)
 MEDIA_URL = '/media/'

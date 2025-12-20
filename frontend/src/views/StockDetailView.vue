@@ -4,7 +4,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStockStore } from '@/stores/stock'
 import { useAuthStore } from '@/stores/auth'
 import axios from 'axios'
+
+// 컴포넌트 임포트
 import StockNews from '@/components/StockNews.vue'
+import StockAiSummary from '@/components/StockAiSummary.vue'
+import StockAiRecommend from '@/components/StockAiRecommend.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -49,8 +53,17 @@ const chartOptions = computed(() => {
 
 const series = computed(() => [{ name: '종가', data: chartData.value }])
 
+// [수정] 데이터 로드 함수: 진입 시 AI 분석 자동 실행
 const loadData = async (ticker) => {
   chartData.value = []
+  
+  // 1. 기존 AI 데이터 초기화 (깜빡임 방지)
+  stockStore.aiAnalysis = null 
+  
+  // 2. AI 분석 요청 자동 시작 (await 없이 실행하여 차트 로딩과 병렬 처리)
+  stockStore.fetchAiAnalysis(ticker)
+
+  // 3. 주식 기본 정보 및 차트 로드
   await stockStore.getStockDetail(ticker)
   await fetchChartData('1y')
   if (authStore.isAuthenticated) await stockStore.fetchWatchlist()
@@ -72,10 +85,17 @@ const formatNum = (num) => num?.toLocaleString() || '-'
 const getPriceColor = (change) => change > 0 ? 'text-rose-500' : (change < 0 ? 'text-blue-600' : 'text-gray-400')
 const getArrow = (change) => change > 0 ? '▲' : (change < 0 ? '▼' : '-')
 const isLiked = computed(() => stockStore.currentStock && stockStore.myWatchlist.some(item => item.stock.ticker === stockStore.currentStock.ticker))
+
 const toggleWatchlist = async () => {
   if (!authStore.isAuthenticated) { if(confirm('로그인이 필요합니다.')) router.push('/login'); return }
   const ticker = stockStore.currentStock.ticker
   isLiked.value ? await stockStore.removeFromWatchlist(ticker) : await stockStore.addToWatchlist(ticker)
+}
+
+const getBadgeStyle = (action) => {
+  if (action === '매수') return 'bg-[#10B981] text-black'
+  if (action === '매도') return 'bg-rose-500 text-white'
+  return 'bg-gray-500 text-white'
 }
 </script>
 
@@ -84,7 +104,6 @@ const toggleWatchlist = async () => {
     
     <div class="fixed inset-0 bg-gray-50 dark:bg-[#0B0E14] -z-30 transition-colors duration-300"></div>
     <div class="fixed inset-0 animate-gradient-bg -z-20 opacity-0 dark:opacity-100 transition-opacity duration-300"></div>
-    
     <div class="fixed top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-[120px] -z-10 opacity-30 dark:bg-indigo-600/20 dark:opacity-40"></div>
     <div class="fixed bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-400/20 rounded-full blur-[120px] -z-10 opacity-30 dark:bg-violet-600/20 dark:opacity-40"></div>
 
@@ -153,9 +172,9 @@ const toggleWatchlist = async () => {
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 mt-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
         
-        <div class="bg-white dark:bg-[#1e1e45] rounded-3xl p-6 md:p-8 border border-gray-200 dark:border-white/5 transition-colors">
+        <div class="bg-white dark:bg-[#1e1e45] rounded-3xl p-6 md:p-8 border border-gray-200 dark:border-white/5 transition-colors h-full">
           <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">주요 지표</h3>
           <div class="grid grid-cols-2 gap-y-8 gap-x-4" v-if="stockStore.currentStock.latest_price">
              <div class="group"><p class="text-gray-500 dark:text-gray-400 text-sm mb-1">시가</p><p class="text-lg font-bold text-gray-900 dark:text-white">{{ formatNum(stockStore.currentStock.latest_price.open_price) }}원</p></div>
@@ -165,18 +184,39 @@ const toggleWatchlist = async () => {
           </div>
         </div>
         
-        <div class="bg-indigo-50 dark:bg-[#1e1e45] rounded-3xl p-6 md:p-8 border border-indigo-100 dark:border-white/5 flex flex-col justify-between relative overflow-hidden transition-colors">
-           <div>
-            <div class="flex justify-between items-start mb-6">
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">디딤 AI 체크 <span class="bg-[#5445EE] text-white text-xs px-2 py-1 rounded-full ml-2">BETA</span></h3>
-            </div>
-            <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">이 종목에 대한 AI 분석 리포트가 준비되어 있습니다.</p>
+        <div class="bg-white dark:bg-[#1e1e45] rounded-3xl p-6 md:p-8 border border-gray-200 dark:border-white/5 flex flex-col relative overflow-hidden transition-colors shadow-lg h-full min-h-[300px]">
+          
+          <div v-if="!stockStore.aiAnalysis" class="flex-1 flex flex-col items-center justify-center text-center">
+             <div class="animate-spin w-10 h-10 border-4 border-[#5445EE] border-t-transparent rounded-full mb-4"></div>
+             <p class="text-gray-900 dark:text-white font-bold animate-pulse text-lg">AI가 기업을 분석 중입니다...</p>
+             <p class="text-sm text-gray-500 mt-2">잠시만 기다려주세요 (약 3~5초 소요)</p>
           </div>
-          <button class="w-full py-4 bg-[#5445EE] hover:bg-[#4335c0] text-white font-bold rounded-xl transition-all shadow-lg active:scale-95">AI 분석 리포트 생성하기</button>
+
+          <div v-else class="flex-1 flex flex-col animate-in fade-in zoom-in duration-500">
+            <div class="flex justify-between items-start mb-6">
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                디딤 Comment
+              </h3>
+              <span class="px-4 py-1.5 rounded-full text-sm font-bold shadow-lg" :class="getBadgeStyle(stockStore.aiAnalysis.opinion.action)">
+                {{ stockStore.aiAnalysis.opinion.action }}
+              </span>
+            </div>
+            
+            <h4 class="text-lg font-bold text-indigo-600 dark:text-indigo-300 mb-3">
+                {{ stockStore.aiAnalysis.opinion.title }}
+            </h4>
+            <p class="text-gray-800 dark:text-white font-medium leading-relaxed text-lg">
+              {{ stockStore.aiAnalysis.opinion.reason }}
+            </p>
+          </div>
         </div>
       </div>
 
+      <StockAiSummary />
+
       <StockNews :ticker="route.params.ticker" />
+
+      <StockAiRecommend />
 
     </main>
     
