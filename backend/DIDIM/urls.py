@@ -25,6 +25,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("stocks/", include("stocks.urls")),
     path("ai/", include("ai.urls")),
+    path("subscriptions/", include("subscriptions.urls")),
 ]
 
 # 개발 환경에서 미디어 파일 서빙

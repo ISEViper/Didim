@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     'accounts',
     'stocks',
     'ai',
+    'subscriptions',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
@@ -144,3 +145,7 @@ GMS_API_KEY = os.getenv('GMS_API_KEY')
 # 미디어 파일 설정(프로필 이미지 등)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# 토스페이먼츠 설정
+TOSS_CLIENT_KEY = os.getenv('TOSS_CLIENT_KEY', '')
+TOSS_SECRET_KEY = os.getenv('TOSS_SECRET_KEY', '')

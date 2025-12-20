@@ -2,14 +2,14 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import Sidebar from '@/components/SideBar.vue' // [필수] 사이드바 컴포넌트 임포트
+import Sidebar from '@/components/SideBar.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
 const user = computed(() => authStore.user)
 
-// [공통] 사용자 닉네임/이름 표시 로직
+// 사용자 닉네임/이름 표시 로직
 const displayName = computed(() => {
   if (user.value?.nickname) return user.value.nickname
   if (user.value?.first_name) {
@@ -20,7 +20,7 @@ const displayName = computed(() => {
   return '사용자'
 })
 
-// [공통] 이니셜 표시
+// 이니셜 표시
 const displayInitial = computed(() => {
   if (user.value?.display_initial) return user.value.display_initial
   if (user.value?.first_name) return user.value.first_name[0].toUpperCase()
@@ -30,18 +30,29 @@ const displayInitial = computed(() => {
 
 const profileImageUrl = computed(() => user.value?.profile_image_url || null)
 
-// [공통] 메뉴(사이드바) 상태
+// 프리미엄 구독 여부
+const isPremium = computed(() => user.value?.is_premium || false)
+
+// 구독 플랜 이름
+const subscriptionPlanName = computed(() => {
+  if (user.value?.subscription_status?.plan_name) {
+    return user.value.subscription_status.plan_name + ' 플랜'
+  }
+  return null
+})
+
+// 메뉴(사이드바) 상태
 const isMenuOpen = ref(false)
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
-// [공통] 로그아웃
+// 로그아웃
 const handleLogout = async () => {
   if(confirm("로그아웃 하시겠습니까?")) {
     await authStore.logOut()
     alert("로그아웃 되었습니다.")
-    router.push('/') // 메인으로 이동
+    router.push('/')
   }
 }
 
@@ -49,9 +60,7 @@ const handleLogout = async () => {
 const goToPasswordConfirm = () => {
   if(!user.value?.has_password) {
     router.push('/account/edit')
-  }
-
-  else {
+  } else {
     router.push('/account/confirm')
   }
 }
@@ -88,7 +97,6 @@ onMounted(async () => {
       </div>
 
       <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-
          <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
           로그아웃
         </button>
@@ -117,8 +125,18 @@ onMounted(async () => {
           <div>
             <h2 class="text-xl font-bold text-primary">{{ displayName }}</h2>
             <p class="text-sm text-secondary mb-2">{{ user?.email }}</p>
-            <span class="inline-block px-3 py-1 text-xs font-bold bg-indigo-600 text-white rounded-full shadow-lg shadow-indigo-500/30">
-              DIDIM 멤버십
+            <!-- 구독 상태에 따른 배지 -->
+            <span 
+              v-if="isPremium"
+              class="inline-block px-3 py-1 text-xs font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full shadow-lg shadow-indigo-500/30"
+            >
+              {{ subscriptionPlanName || '프리미엄 플랜' }}
+            </span>
+            <span 
+              v-else
+              class="inline-block px-3 py-1 text-xs font-bold bg-gray-500 text-white rounded-full"
+            >
+              무료 플랜
             </span>
           </div>
         </div>
@@ -142,7 +160,8 @@ onMounted(async () => {
             </svg>
           </button>
 
-          <button
+          <router-link
+            to="/subscription"
             class="w-full flex items-center justify-between p-4 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all group border border-transparent hover:border-black/5 dark:hover:border-white/10"
           >
             <div class="flex items-center gap-3">
@@ -157,7 +176,7 @@ onMounted(async () => {
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-secondary group-hover:text-primary transition-colors">
               <path d="m9 18 6-6-6-6"/>
             </svg>
-          </button>
+          </router-link>
 
           <div class="w-full flex items-center justify-between p-4 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-all border border-transparent hover:border-black/5 dark:hover:border-white/10">
             <div class="flex items-center gap-3">

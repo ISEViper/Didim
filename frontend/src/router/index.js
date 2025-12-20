@@ -8,7 +8,9 @@ import WatchlistView from '@/views/WatchlistView.vue'
 import AccountMainView from '@/views/AccountMainView.vue'
 import PasswordConfirmView from '@/views/PasswordConfirmView.vue'
 import AccountView from '@/views/AccountView.vue'
-
+import SubscriptionView from '@/views/SubscriptionView.vue'
+import SubscriptionSuccessView from '@/views/SubscriptionSuccessView.vue'
+import SubscriptionFailView from '@/views/SubscriptionFailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,7 +59,22 @@ const router = createRouter({
       path: '/account/edit',
       name: 'account-edit',
       component: AccountView
-    }
+    },
+    {
+      path: '/subscription',
+      name: 'subscription',
+      component: SubscriptionView
+    },
+    {
+      path: '/subscription/success',
+      name: 'subscription-success',
+      component: SubscriptionSuccessView
+    },
+    {
+      path: '/subscription/fail',
+      name: 'subscription-fail',
+      component: SubscriptionFailView
+    },
   ]
 })
 

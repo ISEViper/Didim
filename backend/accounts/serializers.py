@@ -49,6 +49,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     has_password = serializers.SerializerMethodField()
     profile_image_url = serializers.SerializerMethodField()
     display_initial = serializers.SerializerMethodField()
+    is_premium = serializers.SerializerMethodField()
+    subscription_status = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -62,6 +64,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'profile_image_url',
             'display_initial',
             'has_password',
+            'is_premium',
+            'subscription_status',
         ]
         read_only_fields = ['pk', 'email', 'first_name', 'last_name']
 
@@ -78,6 +82,23 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     def get_has_password(self, obj):
         return obj.has_usable_password()
+    
+    def get_is_premium(self, obj):
+        try:
+            return obj.subscription.is_active
+        except:
+            return False
+        
+    def get_subscription_status(self, obj):
+        try:
+            sub = obj.subscription
+            return {
+                'status': sub.status,
+                'plan_name': sub.plan.name if sub.plan else None,
+                'expires_at': sub.expires_at
+            }
+        except:
+            return None
 
 
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
