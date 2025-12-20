@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from datetime import timedelta
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -61,12 +62,20 @@ REST_FRAMEWORK = {
 
 REST_AUTH = {
     'USE_JWT': True,
+    'JWT_AUTH_HTTPONLY': False,
     'JWT_AUTH_COOKIE': 'didim-auth',
     'JWT_AUTH_REFRESH_COOKIE': 'didim-refresh',
     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
     # 로그인 시 'email' 필드를 받도록 명시
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserProfileSerializer',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 ROOT_URLCONF = "DIDIM.urls"
