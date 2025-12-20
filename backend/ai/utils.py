@@ -31,7 +31,7 @@ def generate_stock_analysis(ticker, stock_name):
     - summary_3: 미래 성장 동력 및 전망
 
     [Task 3: 연관 테마 추천주 4선]
-    - 분석 대상 기업과 섹터/테마가 유사한 국내 상장주 (KOSPI/KOSDAQ) 4개 선정
+    - 분석 대상 기업과 섹터/테마가 유사한 국내 상장주 (KOSPI) 4개 선정
     - 단, 입력된 기업({stock_name})은 제외할 것
     - name: 기업명
     - code: 종목코드 (6자리)
