@@ -18,14 +18,14 @@ export const useAuthStore = defineStore('auth', () => {
       ? { headers: { 'Content-Type': 'multipart/form-data' } }
       : {}
 
-    const res = await axios.post('/accounts/signup/', payload, config)
+    const res = await axios.post('/api/accounts/signup/', payload, config)
     return res.data
   }
 
   // 4. 액션 - 로그인
   const logIn = async (payload) => {
     try {
-      const res = await axios.post('/accounts/login/', payload)
+      const res = await axios.post('/api/accounts/login/', payload)
       
       const accessToken = res.data.key || res.data.access || res.data.access_token
       
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get('/accounts/user/')
+      const res = await axios.get('/api/accounts/user/')
       user.value = res.data
       localStorage.setItem('user', JSON.stringify(res.data))
     } catch (err) {
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const logOut = async () => {
     try {
-      await axios.post('/accounts/logout/')
+      await axios.post('/api/accounts/logout/')
     } catch (err) {
     } finally {
       token.value = null
@@ -73,7 +73,8 @@ export const useAuthStore = defineStore('auth', () => {
   // 네이버 로그인 시작 (로그인 페이지로 이동)
   const naverLogin = () => {
     const NAVER_CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID  // 여기에 네이버 Client ID
-    const redirectUri = encodeURIComponent('http://localhost:5173/oauth/naver/callback')
+    const baseUrl = import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173'
+    const redirectUri = encodeURIComponent(`${baseUrl}/oauth/naver/callback`)
     const state = Math.random().toString(36).substring(2, 15)
   
     // state를 localStorage에 저장 (CSRF 방지용)
@@ -92,7 +93,7 @@ export const useAuthStore = defineStore('auth', () => {
       throw new Error('Invalid state')
     }
     
-    const response = await axios.post('/accounts/naver/callback/', {
+    const response = await axios.post('/api/accounts/naver/callback/', {
       code,
       state
     })

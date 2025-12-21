@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 import FinanceDataReader as fdr
 from datetime import datetime, timedelta
 from django.conf import settings
@@ -72,7 +73,6 @@ def save_data(items, date_obj, asset_type):
 
 
 def fetch_krx_data(date_str):
-    # 1. 날짜 포맷 변환
     db_date = datetime.strptime(date_str, "%Y%m%d").date()
     
     headers = {"AUTH_KEY": AUTH_KEY}
@@ -80,11 +80,9 @@ def fetch_krx_data(date_str):
 
     print(f"=== {date_str} 데이터 수집 시작 ===")
 
-    # 기존 시세 데이터 삭제 (초기화)
     deleted_count, _ = DailyPrice.objects.all().delete()
     print(f"🔄 기존 데이터 초기화: {db_date} 날짜의 데이터 {deleted_count}건 삭제됨.")
 
-    # 2. 주식 데이터 요청
     try:
         res = requests.get(STOCK_API_URL, headers=headers, params=params)
         if res.status_code == 200:
@@ -96,7 +94,6 @@ def fetch_krx_data(date_str):
     except Exception as e:
         print(f"[주식] 에러: {e}")
 
-    # 3. ETF 데이터 요청
     try:
         res = requests.get(ETF_API_URL, headers=headers, params=params)
         if res.status_code == 200:
@@ -118,28 +115,39 @@ def update_chart_data(ticker, period_year=5):
 
     end_date = datetime.now().date()
     start_date = end_date - timedelta(days=365 * period_year)
+
     try:
-        df = fdr.DataReader(ticker, start_date)
+        df = fdr.DataReader(f'NAVER:{ticker}', start_date)
+        
     except Exception as e:
-        print(f"⚠️ {stock.name}({ticker}) 데이터 수집 실패: 라이브러리 에러 - {e}")
+        print(f"{stock.name}({ticker}) FDR 호출 실패: {e}")
         return
 
-    if df.empty:
-        print(f"⚠️ {stock.name}({ticker}) 데이터 없음 (Empty)")
+    if df is None or df.empty:
+        print(f"{stock.name}({ticker}) 데이터 없음 (Empty DataFrame)")
         return
+
+    df = df.dropna(subset=['Close']) 
 
     chart_prices = []
     
     try:
         for date, row in df.iterrows():
+            close_val = row['Close']
+            if pd.isna(close_val) or close_val == 0:
+                continue
+
             chart_prices.append(Chartprice(
                 stock=stock,
                 date=date.date(),
-                close_price=int(row['Close'])
+                close_price=int(float(close_val))
             ))
 
-        Chartprice.objects.bulk_create(chart_prices)
-        print(f"{stock.name} 업데이트 완료")
+        if chart_prices:
+            Chartprice.objects.bulk_create(chart_prices)
+            print(f"{stock.name}({ticker}) 차트 업데이트 완료 ({len(chart_prices)}건)")
+        else:
+            print(f"{stock.name}({ticker}) 유효한 차트 데이터가 없습니다.")
         
     except Exception as e:
-        print(f"{stock.name} DB 저장 실패: {e}")
+        print(f"{stock.name}({ticker}) DB 저장 실패: {e}")

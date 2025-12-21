@@ -23,7 +23,7 @@ def get_ai_analysis(request, ticker):
         stock_obj = Stock.objects.filter(ticker=ticker).first()
         stock_name = stock_obj.name if stock_obj else ticker
 
-        result_data = generate_stock_analysis(ticker, stock_name)
+        result_data = generate_stock_analysis(ticker, stock_name, asset_type=stock_obj.asset_type)
 
         if not result_data:
             return Response({"error": "AI 분석 생성 실패"}, status=500)

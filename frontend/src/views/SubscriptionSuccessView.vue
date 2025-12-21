@@ -24,7 +24,7 @@ onMounted(async () => {
 
   try {
     // 1. 빌링키 발급
-    const billingRes = await axios.post('/subscriptions/billing-key/', {
+    const billingRes = await axios.post('/api/subscriptions/billing-key/', {
       authKey,
       customerKey
     })
@@ -34,7 +34,7 @@ onMounted(async () => {
     }
 
     // 2. 플랜 정보 조회
-    const planRes = await axios.get('/subscriptions/plans/')
+    const planRes = await axios.get('/api/subscriptions/plans/')
     const plan = planRes.data[0]
 
     if (!plan) {
@@ -42,7 +42,7 @@ onMounted(async () => {
     }
 
     // 3. 구독 결제 실행
-    const subscribeRes = await axios.post('/subscriptions/subscribe/', {
+    const subscribeRes = await axios.post('/api/subscriptions/subscribe/', {
       billingKey: billingRes.data.billingKey,
       customerKey: customerKey,
       planId: plan.id

@@ -73,7 +73,7 @@ const fetchChartData = async (period) => {
   activeTab.value = period
   isLoading.value = true
   try {
-    const res = await axios.get(`http://127.0.0.1:8000/stocks/${route.params.ticker}/chart/`, { params: { period } })
+    const res = await axios.get(`/api/stocks/${route.params.ticker}/chart/`, { params: { period } })
     chartData.value = res.data.map(item => ({ x: item.date, y: item.close_price }))
   } catch (err) { console.error(err) } finally { isLoading.value = false }
 }
@@ -189,7 +189,7 @@ const getBadgeStyle = (action) => {
           <div v-if="!stockStore.aiAnalysis" class="flex-1 flex flex-col items-center justify-center text-center">
              <div class="animate-spin w-10 h-10 border-4 border-[#5445EE] border-t-transparent rounded-full mb-4"></div>
              <p class="text-gray-900 dark:text-white font-bold animate-pulse text-lg">AI가 기업을 분석 중입니다...</p>
-             <p class="text-sm text-gray-500 mt-2">잠시만 기다려주세요 (약 3~5초 소요)</p>
+             <p class="text-sm text-gray-500 mt-2">잠시만 기다려주세요 (약 20~30초 소요)</p>
           </div>
 
           <div v-else class="flex-1 flex flex-col animate-in fade-in zoom-in duration-500">

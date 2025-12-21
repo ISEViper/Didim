@@ -24,7 +24,7 @@ const isSubscriptionActive = computed(() => {
 // 플랜 정보 조회
 const fetchPlan = async () => {
   try {
-    const res = await axios.get('/subscriptions/plans/')
+    const res = await axios.get('/api/subscriptions/plans/')
     if (res.data.length > 0) {
       plan.value = res.data[0] // 첫 번째 플랜 (프리미엄)
     }
@@ -36,7 +36,7 @@ const fetchPlan = async () => {
 // 구독 상태 조회
 const fetchSubscriptionStatus = async () => {
   try {
-    const res = await axios.get('/subscriptions/status/')
+    const res = await axios.get('/api/subscriptions/status/')
     hasSubscription.value = res.data.has_subscription
     subscription.value = res.data.subscription
   } catch (err) {
@@ -47,7 +47,7 @@ const fetchSubscriptionStatus = async () => {
 // 결제 내역 조회
 const fetchPayments = async () => {
   try {
-    const res = await axios.get('/subscriptions/payments/')
+    const res = await axios.get('/api/subscriptions/payments/')
     payments.value = res.data
   } catch (err) {
     console.error('결제 내역 조회 실패:', err)
@@ -97,7 +97,7 @@ const cancelSubscription = async () => {
   isProcessing.value = true
 
   try {
-    const res = await axios.post('/subscriptions/cancel/')
+    const res = await axios.post('/api/subscriptions/cancel/')
     alert(res.data.message)
     await fetchSubscriptionStatus()
     await authStore.fetchUser()

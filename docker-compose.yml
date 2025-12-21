@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: didim-backend
+    volumes:
+      - ./backend:/app
+      - ./backend/db.sqlite3:/app/db.sqlite3
+      - media_volume:/app/media  
+    env_file:
+      - ./backend/.env  
+    expose:
+      - "8000"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: didim-frontend
+    ports:
+      - "80:80"  
+    depends_on:
+      - backend
+    volumes:
+      - media_volume:/app/media
+    env_file:
+      - ./frontend/.env
+
+volumes:
+  media_volume:
+      

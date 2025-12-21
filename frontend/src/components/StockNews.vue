@@ -13,7 +13,7 @@ const fetchNews = async () => {
   newsList.value = []
   isLoading.value = true
   try {
-    const res = await axios.get(`http://127.0.0.1:8000/stocks/${props.ticker}/news/`)
+    const res = await axios.get(`/api/stocks/${props.ticker}/news/`)
     newsList.value = res.data
   } catch (e) { console.error(e) } finally { isLoading.value = false }
 }

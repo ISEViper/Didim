@@ -61,7 +61,7 @@ const displayImage = computed(() => {
 const fetchProfile = async () => {
   isLoading.value = true
   try {
-    const res = await axios.get('/accounts/profile/')
+    const res = await axios.get('/api/accounts/profile/')
     profile.value = {
       firstName: res.data.first_name || '',
       lastName: res.data.last_name || '',
@@ -105,7 +105,7 @@ const handleImageSelect = (event) => {
 const removeImage = async () => {
   if (confirm('프로필 이미지를 삭제하시겠습니까?')) {
     try {
-      await axios.delete('/accounts/profile/')
+      await axios.delete('/api/accounts/profile/')
       profile.value.profileImageUrl = null
       profileImagePreview.value = null
       newProfileImage.value = null
@@ -136,7 +136,7 @@ const saveProfile = async () => {
       formData.append('profile_image', newProfileImage.value)
     }
 
-    const res = await axios.patch('/accounts/profile/', formData, {
+    const res = await axios.patch('/api/accounts/profile/', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
 
@@ -178,7 +178,7 @@ const changePassword = async () => {
 
   isSaving.value = true
   try {
-    await axios.post('/accounts/password/change/', {
+    await axios.post('/api/accounts/password/change/', {
       old_password: passwordForm.value.currentPassword,
       new_password1: passwordForm.value.newPassword,
       new_password2: passwordForm.value.newPasswordConfirm

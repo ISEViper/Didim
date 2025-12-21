@@ -17,7 +17,7 @@ export const useStockStore = defineStore('stock', () => {
       return
     }
     try {
-      const res = await axios.get(`stocks/search/?q=${query}`)
+      const res = await axios.get(`/api/stocks/search/?q=${query}`)
       searchResults.value = res.data
     } catch (err) {
       console.error('검색 실패:', err)
@@ -27,7 +27,7 @@ export const useStockStore = defineStore('stock', () => {
   // 주식 상세 정보 가져오기
   const getStockDetail = async (ticker) => {
     try {
-      const res = await axios.get(`stocks/${ticker}/`)
+      const res = await axios.get(`/api/stocks/${ticker}/`)
       currentStock.value = res.data
     } catch (err) {
       console.error('상세 정보 로드 실패:', err)
@@ -37,7 +37,7 @@ export const useStockStore = defineStore('stock', () => {
   
   const fetchWatchlist = async () => {
     try {
-      const res = await axios.get('stocks/watchlist/')
+      const res = await axios.get('/api/stocks/watchlist/')
       myWatchlist.value = res.data
     } catch (err) {
       console.error('관심종목 로드 실패: ', err)
@@ -47,7 +47,7 @@ export const useStockStore = defineStore('stock', () => {
   // 관심종목 삭제하기
   const removeFromWatchlist = async (ticker) => {
     try {
-      await axios.delete(`stocks/watchlist/${ticker}/`)
+      await axios.delete(`/api/stocks/watchlist/${ticker}/`)
       // 목록에서 즉시 제거 (새로고침 없이 반영)
       myWatchlist.value = myWatchlist.value.filter(item => item.stock.ticker !== ticker)
     } catch (err) {
@@ -58,7 +58,7 @@ export const useStockStore = defineStore('stock', () => {
   // 관심종목 추가하기 (나중에 상세페이지 하트 버튼용)
   const addToWatchlist = async (ticker) => {
     try {
-      await axios.post('stocks/watchlist/', { ticker })
+      await axios.post('/api/stocks/watchlist/', { ticker })
       await fetchWatchlist() // 목록 갱신
     } catch (err) {
       console.error('추가 실패:', err)
@@ -72,11 +72,11 @@ export const useStockStore = defineStore('stock', () => {
     aiAnalysis.value = null
 
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/ai/analyze/${ticker}/`)
+      const res = await axios.get(`/api/ai/analyze/${ticker}/`)
 
       console.log("AI 데이터 수신 성공:", res.data)
       aiAnalysis.value = res.data
-    } catch(error) {
+    } catch(err) {
       console.error("AI 리포트 생성 실패:", err)
       alert("AI 분석을 불러오는데 실패했습니다.")
     } finally {
