@@ -13,6 +13,10 @@ import SubscriptionView from '@/views/SubscriptionView.vue'
 import SubscriptionSuccessView from '@/views/SubscriptionSuccessView.vue'
 import SubscriptionFailView from '@/views/SubscriptionFailView.vue'
 import CommunityView from '@/views/CommunityView.vue'
+import FinanceView from '@/views/FinanceView.vue'
+import DepositListView from '@/views/DepositListView.vue'
+import DepositDetailView from '@/views/DepositDetailView.vue'
+import CommodityView from '@/views/CommodityView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,6 +90,26 @@ const router = createRouter({
       path: '/community',
       name: 'community',
       component: CommunityView
+    },
+    {
+      path: '/finance',
+      name: 'finance',
+      component: FinanceView
+    },
+    {
+      path: '/finance/deposits',
+      name: 'deposit-list',
+      component: DepositListView
+    },
+    {
+      path: '/finance/deposits/:id',
+      name: 'deposit-detail',
+      component: DepositDetailView
+    },
+    {
+      path: '/finance/commodities',
+      name: 'commodities',
+      component: CommodityView
     },
   ]
 })

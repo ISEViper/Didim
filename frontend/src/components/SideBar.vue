@@ -113,66 +113,90 @@ const handleLogout = async () => {
 
         </div>
 
-        <nav class="flex-1 p-6 space-y-2 overflow-y-auto">
-            
-            <router-link 
-              to="/stock" 
-              @click="emit('close')" 
-              class="flex items-center gap-4 px-4 py-3 rounded-xl font-bold transition-all active:scale-95"
-              active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20"
-              :class="$route.path === '/' ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              주식 상품 검색
-            </router-link>
+        <nav class="flex-1 p-6 space-y-2 overflow-y-auto">            
+          <!-- 금융 상품 검색 -->
+          <router-link 
+            to="/finance" 
+            @click="emit('close')" 
+            class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
+            active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
+            :class="$route.path.includes('/finance') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            금융 상품 검색
+          </router-link>
 
-            <a href="#" class="flex items-center gap-4 px-4 py-3 text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl font-medium transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              추천 리포트
-            </a>
+          <!-- 주식 상품 검색 (기존 메인 화면) -->
+          <router-link 
+            to="/" 
+            @click="emit('close')" 
+            class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
+            active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
+            :class="$route.path === '/' ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            주식 상품 검색
+          </router-link>
 
-            <router-link 
-              to="/watchlist" 
-              @click="emit('close')" 
-              class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
-              active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
-              :class="$route.path.includes('/watchlist') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-              </svg>
-              관심종목
-            </router-link>
+          <!-- 가입 상품 -->
+          <router-link 
+            to="/my-products" 
+            @click="emit('close')" 
+            class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
+            active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
+            :class="$route.path.includes('/my-products') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            가입 상품
+          </router-link>
 
-            <router-link 
-              to="/community" 
-              @click="emit('close')" 
-              class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
-              active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
-              :class="$route.path.includes('/community') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-              </svg>
-              피드
-            </router-link>
+          <!-- 증권 관심 종목 -->
+          <router-link 
+            to="/watchlist" 
+            @click="emit('close')" 
+            class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
+            active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
+            :class="$route.path.includes('/watchlist') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+            </svg>
+            증권 관심 종목
+          </router-link>
 
-            <router-link
-              :to="authStore.isAuthenticated ? '/account' : '/login'"
-              @click="emit('close')"
-              class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
-              active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
-              :class="$route.path.includes('/account') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              계정 관리
-            </router-link>
+          <!-- 피드 -->
+          <router-link 
+            to="/community" 
+            @click="emit('close')" 
+            class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
+            active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
+            :class="$route.path.includes('/community') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            피드
+          </router-link>
+
+          <!-- 계정 관리 -->
+          <router-link
+            :to="authStore.isAuthenticated ? '/account' : '/login'"
+            @click="emit('close')"
+            class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
+            active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
+            :class="$route.path.includes('/account') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            계정 관리
+          </router-link>
         </nav>
 
         <div class="p-6 border-t border-gray-200 dark:border-white/5 space-y-3">

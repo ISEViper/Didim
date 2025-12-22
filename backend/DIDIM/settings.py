@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'community',
     'ai',
     'subscriptions',
+    'finance',
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
@@ -160,3 +161,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # 토스페이먼츠 설정
 TOSS_CLIENT_KEY = os.getenv('TOSS_CLIENT_KEY', '')
 TOSS_SECRET_KEY = os.getenv('TOSS_SECRET_KEY', '')
+
+# 금융감독원 API 키
+FSS_API_KEY = os.getenv('FSS_API_KEY', '')
