@@ -13,6 +13,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'accounts',
     'stocks',
+    'community',
     'ai',
     'subscriptions',
     'rest_framework',

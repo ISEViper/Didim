@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
-import HomeView from '@/views/HomeView.vue'
+import StockHomeView from '@/views/StockHomeView.vue'
 import StockDetailView from '@/views/StockDetailView.vue'
 import NaverCallbackView from '@/views/NaverCallbackView.vue'
 import WatchlistView from '@/views/WatchlistView.vue'
@@ -11,6 +11,7 @@ import AccountView from '@/views/AccountView.vue'
 import SubscriptionView from '@/views/SubscriptionView.vue'
 import SubscriptionSuccessView from '@/views/SubscriptionSuccessView.vue'
 import SubscriptionFailView from '@/views/SubscriptionFailView.vue'
+import CommunityView from '@/views/CommunityView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +19,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView 
+      component: StockHomeView 
     },
     {
       path: '/login',
@@ -74,6 +75,11 @@ const router = createRouter({
       path: '/subscription/fail',
       name: 'subscription-fail',
       component: SubscriptionFailView
+    },
+    {
+      path: '/community',
+      name: 'community',
+      component: CommunityView
     },
   ]
 })
