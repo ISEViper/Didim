@@ -123,7 +123,7 @@ onMounted(() => {
     <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60"></div>
 
     <!-- 헤더 -->
-    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0">
       <div class="flex items-center gap-4">
         <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -131,11 +131,12 @@ onMounted(() => {
           </svg>
         </button>
         
-        <button @click="router.back()" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+      <button @click="router.back()" class="flex items-center gap-2 text-gray-500 hover:text-black dark:text-white dark:hover:text-white transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="text-sm font-bold">돌아가기</span>
+      </button>
       </div>
 
       <div class="flex items-center gap-4">

@@ -47,7 +47,7 @@ const features = [
   {
     id: 'deposits',
     title: '예적금 상품',
-    description: '은행별 예금·적금 금리 비교',
+    description: '은행별 예금·적금 금리 확인',
     icon: 'bank',
     color: 'from-blue-500 to-cyan-500',
     route: '/finance/deposits'
@@ -121,7 +121,7 @@ const features = [
         <h1 class="text-5xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-blue-900 to-blue-600 dark:from-white dark:to-gray-400 drop-shadow-2xl mb-4">
           DIDIM
         </h1>
-        <p class="text-lg md:text-xl text-secondary font-medium">어려운 예적금 비교, 당신 곁의 쉬운 디딤</p>
+        <p class="text-lg md:text-xl text-secondary font-medium">어려운 예적금 확인, 당신 곁의 쉬운 디딤</p>
       </div>
 
       <!-- 검색창 -->

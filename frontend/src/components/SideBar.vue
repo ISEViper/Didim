@@ -130,7 +130,7 @@ const handleLogout = async () => {
 
           <!-- 주식 상품 검색 (기존 메인 화면) -->
           <router-link 
-            to="/" 
+            to="/stock" 
             @click="emit('close')" 
             class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95"
             active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"

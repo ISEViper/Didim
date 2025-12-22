@@ -76,11 +76,6 @@ const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
           <p class="text-xl md:text-2xl text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed font-bold">
             디딤과 함께 내 자산을 성장시켜요.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button @click="router.push('/login')" class="px-10 py-4 bg-[#5445EE] text-white font-bold rounded-full text-lg shadow-xl shadow-indigo-500/40 hover:scale-105 transition-transform active:scale-95">
-              시작하기
-            </button>
-          </div>
         </div>
 
         <div class="relative perspective-1000 scroll-item delay-200 w-full max-w-6xl flex justify-center">

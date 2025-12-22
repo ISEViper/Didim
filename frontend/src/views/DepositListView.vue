@@ -110,7 +110,7 @@ onMounted(() => {
     <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60"></div>
 
     <!-- 헤더 -->
-    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0">
       <div class="flex items-center gap-4">
         <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -148,7 +148,7 @@ onMounted(() => {
         <h1 class="text-2xl font-black text-primary flex items-center gap-2">
           🏦 예적금 상품
         </h1>
-        <p class="text-secondary text-sm mt-1">은행별 예금·적금 금리를 비교해보세요</p>
+        <p class="text-secondary text-sm mt-1">은행별 예금·적금 금리를 확인해보세요</p>
       </div>
 
       <!-- 필터 영역 -->
