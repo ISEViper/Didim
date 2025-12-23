@@ -177,14 +177,6 @@ const getPriceColor = (change) => {
         </div>
       </div>
 
-      <div class="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200 text-center">
-        <button class="group relative inline-flex items-center justify-center px-8 py-3.5 font-bold text-white transition-all duration-200 bg-indigo-600 font-lg rounded-full hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:shadow-[0_0_20px_rgba(79,70,229,0.5)] active:scale-95">
-          <span class="mr-2">DIDIM AI 오늘의 추천 종목</span>
-          <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-        </button>
-        <p class="mt-4 text-sm text-secondary font-light">Powered by Google Gemini</p>
-      </div>
-
     </main>
 
     <div class="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in duration-700 delay-500">

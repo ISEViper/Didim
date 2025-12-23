@@ -24,14 +24,7 @@ const toggleMenu = () => {
 
 // 사용자 정보
 const isLoggedIn = computed(() => authStore.isAuthenticated)
-const displayName = computed(() => {
-  const user = authStore.user
-  if (user?.nickname) return user.nickname
-  if (user?.first_name) {
-    return user.last_name ? `${user.last_name}${user.first_name}` : user.first_name
-  }
-  return '사용자'
-})
+const username = computed(() => authStore.user?.nickname || `${authStore.user?.last_name || ''}${authStore.user?.first_name || ''}` || '사용자')
 
 // 은행 목록 (필터용)
 const banks = computed(() => {
