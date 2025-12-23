@@ -84,18 +84,31 @@ const getPriceColor = (change) => {
         </h2>
       </div>
 
-      <div v-if="!isLoggedIn" class="flex justify-end gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-        <router-link to="/login" class="px-4 py-2 text-sm font-bold text-secondary hover:text-primary transition-colors">
-          로그인
-        </router-link>
-        <router-link to="/signup" class="px-5 py-2 text-sm font-bold bg-[#3b4cca] hover:bg-[#3241a8] text-white rounded-full transition-all shadow-lg shadow-indigo-500/30">
-          회원가입
-        </router-link>
-      </div>
+      <div class="flex items-center gap-4 md:gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+        
+        <template v-if="!isLoggedIn">
+          <div class="flex items-center gap-4">
+            <router-link to="/login" class="text-sm font-bold text-secondary hover:text-primary transition-colors">
+              로그인
+            </router-link>
+            <router-link to="/signup" class="px-5 py-2 text-sm font-bold bg-[#3b4cca] hover:bg-[#3241a8] text-white rounded-full transition-all shadow-lg shadow-indigo-500/30">
+              회원가입
+            </router-link>
+          </div>
+        </template>
 
-      <button v-else @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors hidden md:block animate-in fade-in slide-in-from-top-4 duration-500">
-        로그아웃
-      </button>
+        <template v-else>
+          <div class="flex items-center gap-6">
+            <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
+              로그아웃
+            </button>
+            <router-link to="/" class="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-indigo-900 to-indigo-600 dark:from-white dark:to-gray-400 hover:opacity-80 transition-opacity">
+              DIDIM
+            </router-link>
+          </div>
+        </template>
+        
+      </div>
     </header>
 
     <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />

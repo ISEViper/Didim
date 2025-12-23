@@ -19,6 +19,15 @@ onMounted(async () => {
   await stockStore.fetchWatchlist()
 })
 
+// 로그아웃
+const handleLogout = async () => {
+  if (confirm("로그아웃 하시겠습니까?")) {
+    await authStore.logOut()
+    alert("로그아웃 되었습니다.")
+    router.push('/')
+  }
+}
+
 const username = authStore.user?.first_name 
   ? `${authStore.user.last_name}${authStore.user.first_name}` 
   : '회원'
@@ -49,7 +58,7 @@ const goToDetail = (ticker) => {
         <div class="absolute inset-0 animate-gradient-bg -z-10"></div>
         <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60"></div>
 
-    <header class="w-full p-6 md:p-8 flex items-center gap-4 z-50 fixed top-0 left-0 bg-main/50 backdrop-blur-md border-b border-line">
+    <header class="w-full p-6 md:p-8 flex items-center gap-4 z-50 fixed top-0 left-0 bg-main/50 backdrop-blur-md">
       <button @click="isMenuOpen = true" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -58,9 +67,17 @@ const goToDetail = (ticker) => {
       <h2 class="text-xl font-bold tracking-tight text-primary">
         {{ username }}님, 안녕하세요.
       </h2>
-      <div class="ml-auto text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-indigo-900 to-indigo-600 dark:from-white dark:to-gray-400">
+
+    <div class="ml-auto flex items-center gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+      <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
+        로그아웃
+      </button>
+
+      <router-link to="/stock" class="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-indigo-900 to-indigo-600 dark:from-white dark:to-gray-400 hover:opacity-80 transition-opacity">
         DIDIM
+      </router-link>
       </div>
+
     </header>
 
     <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
