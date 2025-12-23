@@ -1,8 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import Sidebar from '@/components/SideBar.vue'
 
 const router = useRouter()
+const authStore = useAuthStore()
 
 // --- 데이터 정의 ---
 const regions = [
@@ -48,6 +51,18 @@ let markers = []
 let infowindow = null
 let ps = null
 
+// 사이드바 상태
+const isMenuOpen = ref(false)
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+// 사용자 정보
+const isLoggedIn = computed(() => authStore.isAuthenticated)
+const username = computed(() => {
+  return authStore.user?.nickname || `${authStore.user?.last_name || ''}${authStore.user?.first_name || ''}` || '사용자'
+})
+
 // --- 로직 함수 ---
 
 const onRegionChange = () => {
@@ -85,7 +100,7 @@ const clearMarkers = () => {
   markers = []
 }
 
-// 지도 인포윈도우 HTML 생성 (인라인 스타일 적용)
+// 지도 인포윈도우 HTML 생성
 const createInfoWindowContent = (place) => {
   return `
     <div style="padding: 12px; min-width: 200px; font-family: sans-serif; border-radius: 8px;">
@@ -167,12 +182,14 @@ onMounted(async () => {
 <template>
   <div class="w-full min-h-screen flex flex-col relative text-gray-900 dark:text-white font-pretendard transition-colors duration-300">
     
+    <!-- 배경 -->
     <div class="fixed inset-0 bg-gray-50 dark:bg-[#0B0E14] -z-30 transition-colors duration-300"></div>
     <div class="fixed inset-0 animate-gradient-bg -z-20 opacity-0 dark:opacity-100 transition-opacity duration-300"></div>
     <div class="fixed top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-[120px] -z-10 opacity-30 dark:bg-indigo-600/20 dark:opacity-40"></div>
     <div class="fixed bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-400/20 rounded-full blur-[120px] -z-10 opacity-30 dark:bg-violet-600/20 dark:opacity-40"></div>
 
-  <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 transition-all duration-300">
+    <!-- 헤더 -->
+    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 transition-all duration-300">
       
       <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
         <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
@@ -186,7 +203,8 @@ onMounted(async () => {
         </h2>
       </div>
 
-      <div v-if="!isLoggedIn" class="flex justify-end gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+      <!-- 비로그인 상태 -->
+      <div v-if="!isLoggedIn" class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
         <router-link to="/login" class="px-4 py-2 text-sm font-bold text-secondary hover:text-primary transition-colors">
           로그인
         </router-link>
@@ -195,7 +213,8 @@ onMounted(async () => {
         </router-link>
       </div>
 
-      <div v-else class="ml-auto flex items-center gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+      <!-- 로그인 상태 -->
+      <div v-else class="flex items-center gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
         <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
           로그아웃
         </button>
@@ -205,8 +224,10 @@ onMounted(async () => {
       </div>
     </header>
 
+    <!-- 사이드바 -->
     <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
 
+    <!-- 메인 컨텐츠 -->
     <main class="flex-1 w-full max-w-7xl mx-auto px-4 pt-32 pb-12 z-10">
       
       <div class="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

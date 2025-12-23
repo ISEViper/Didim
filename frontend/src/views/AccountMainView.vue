@@ -100,6 +100,9 @@ onMounted(async () => {
          <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
           로그아웃
         </button>
+        <router-link to="/" class="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-indigo-900 to-indigo-600 dark:from-white dark:to-gray-400 hover:opacity-80 transition-opacity">
+          DIDIM
+        </router-link>
       </div>
     </header>
 
