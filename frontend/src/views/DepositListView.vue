@@ -136,8 +136,6 @@ onMounted(() => {
       </div>
     </header>
 
-    <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
-
     <!-- 사이드바 -->
     <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
 
@@ -154,14 +152,14 @@ onMounted(() => {
 
       <!-- 필터 영역 -->
       <div class="glass-panel rounded-2xl p-4 mb-6">
-        <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex flex-col md:flex-row md:items-center gap-4">
           
           <!-- 상품 유형 탭 -->
-          <div class="flex bg-gray-100 dark:bg-white/5 rounded-xl p-1">
+          <div class="flex bg-gray-100 dark:bg-white/5 rounded-xl p-1 shrink-0">
             <button
               @click="selectedType = 'deposit'"
               :class="[
-                'flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all',
+                'px-5 py-2.5 text-sm font-bold rounded-lg transition-all whitespace-nowrap',
                 selectedType === 'deposit'
                   ? 'bg-white dark:bg-slate-700 text-blue-600 shadow'
                   : 'text-secondary hover:text-primary'
@@ -172,7 +170,7 @@ onMounted(() => {
             <button
               @click="selectedType = 'saving'"
               :class="[
-                'flex-1 px-4 py-2 text-sm font-bold rounded-lg transition-all',
+                'px-5 py-2.5 text-sm font-bold rounded-lg transition-all whitespace-nowrap',
                 selectedType === 'saving'
                   ? 'bg-white dark:bg-slate-700 text-blue-600 shadow'
                   : 'text-secondary hover:text-primary'
@@ -184,24 +182,29 @@ onMounted(() => {
 
           <!-- 검색 -->
           <div class="flex-1 relative">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <input
               v-model="searchQuery"
               type="text"
               placeholder="상품명, 은행명 검색..."
-              class="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-white/5 rounded-xl text-primary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              class="w-full h-11 pl-12 pr-4 bg-gray-100 dark:bg-white/5 rounded-xl text-primary placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <!-- 은행 필터 -->
           <select
             v-model="selectedBank"
-            class="px-4 py-2 bg-gray-100 dark:bg-white/5 rounded-xl text-primary focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="h-11 px-4 bg-gray-100 dark:bg-white/5 rounded-xl text-primary focus:outline-none focus:ring-2 focus:ring-blue-500 shrink-0 min-w-[140px]"
           >
-            <option value="">전체 은행</option>
-            <option v-for="bank in banks" :key="bank" :value="bank">
+            <option value="" class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white">전체 은행</option>
+            <option 
+              v-for="bank in banks" 
+              :key="bank" 
+              :value="bank"
+              class="bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+            >
               {{ bank }}
             </option>
           </select>
