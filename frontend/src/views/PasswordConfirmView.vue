@@ -29,7 +29,7 @@ const confirmPassword = async () => {
 
   try {
     // 비밀번호 확인 API 호출
-    await axios.post('/accounts/password/verify/', {
+    await axios.post('api/accounts/password/verify/', {
       password: password.value
     })
     
