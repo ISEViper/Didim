@@ -19,6 +19,8 @@ import DepositDetailView from '@/views/DepositDetailView.vue'
 import CommodityView from '@/views/CommodityView.vue'
 import FinanceBankView from '@/views/FinanceBankView.vue'
 import FinanceMyProductView from '@/views/FinanceMyProductView.vue'
+import AiRecommendView from '@/views/AiRecommendView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -122,6 +124,11 @@ const router = createRouter({
       path: '/my-products',
       name: 'my-products',
       component: FinanceMyProductView
+    },
+    {
+      path: '/ai-recommend',
+      name: 'ai-recommend',
+      component: AiRecommendView
     },
   ]
 })
