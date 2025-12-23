@@ -9,6 +9,7 @@ const authStore = useAuthStore()
 
 const isMenuOpen = ref(false)
 const isLoggedIn = computed(() => authStore.isAuthenticated)
+const username = computed(() => authStore.user?.nickname || `${authStore.user?.last_name || ''}${authStore.user?.first_name || ''}` || '사용자')
 
 // 스크롤 애니메이션 옵저버
 const observerOptions = {
@@ -40,6 +41,13 @@ onUnmounted(() => {
   if (observer) observer.disconnect()
 })
 
+const handleLogout = async () => {
+  if (confirm("로그아웃 하시겠습니까?")) {
+    await authStore.logOut()
+    alert("로그아웃 되었습니다.")
+    router.push('/')
+  }
+}
 const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
 </script>
 
@@ -49,17 +57,39 @@ const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
     <div class="fixed inset-0 bg-gray-50 dark:bg-[#0B0E14] -z-30 transition-colors duration-300"></div>
     <div class="fixed inset-0 animate-gradient-bg -z-20 opacity-0 dark:opacity-100 transition-opacity duration-300"></div>
     
-    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 bg-white/70 dark:bg-[#0B0E14]/70 backdrop-blur-md border-b border-gray-200 dark:border-white/5 transition-all duration-300">
-      <div class="flex items-center gap-4">
+<header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 transition-all duration-300">
+      
+      <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
         <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
-           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-900 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
         </button>
-        <div class="text-xl font-black tracking-tighter text-indigo-900 dark:text-white">DIDIM</div>
+        
+        <h2 v-if="isLoggedIn" class="text-lg md:text-xl font-bold tracking-tight text-primary">
+          {{ username }}님, 안녕하세요.
+        </h2>
       </div>
-      <div v-if="!isLoggedIn" class="flex gap-3">
-        <router-link to="/login" class="px-5 py-2.5 text-sm font-bold text-gray-500 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white transition-colors">로그인</router-link>
-        <router-link to="/signup" class="px-6 py-2.5 text-sm font-bold bg-[#5445EE] text-white rounded-full hover:bg-indigo-600 transition-all shadow-lg hover:shadow-indigo-500/30">회원가입</router-link>
+
+      <div v-if="!isLoggedIn" class="flex justify-end gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+        <router-link to="/login" class="px-4 py-2 text-sm font-bold text-secondary hover:text-primary transition-colors">
+          로그인
+        </router-link>
+        <router-link to="/signup" class="px-5 py-2 text-sm font-bold bg-[#3b4cca] hover:bg-[#3241a8] text-white rounded-full transition-all shadow-lg shadow-indigo-500/30">
+          회원가입
+        </router-link>
       </div>
+
+      <div v-else class="ml-auto flex items-center gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+        <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
+          로그아웃
+        </button>
+        <router-link to="/" class="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-indigo-900 to-indigo-600 dark:from-white dark:to-gray-400 hover:opacity-80 transition-opacity">
+          DIDIM
+        </router-link>
+      </div>
+      
+
     </header>
 
     <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
@@ -257,6 +287,9 @@ const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
             AI가 정리해주는 회사 정보와 매매 타이밍으로<br>
             스마트한 투자를 시작하세요.
           </p>
+          <button @click="router.push('/stock')" class="px-8 py-3 mt-4 bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white font-bold rounded-full hover:bg-gray-300 dark:hover:bg-white/20 transition-colors">
+              검색하러 가기
+          </button>
         </div>
       </section>
 

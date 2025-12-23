@@ -18,6 +18,7 @@ import DepositListView from '@/views/DepositListView.vue'
 import DepositDetailView from '@/views/DepositDetailView.vue'
 import CommodityView from '@/views/CommodityView.vue'
 import FinanceBankView from '@/views/FinanceBankView.vue'
+import FinanceMyProductView from '@/views/FinanceMyProductView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -116,6 +117,11 @@ const router = createRouter({
       path: '/finance/banks',
       name: 'banks',
       component: FinanceBankView
+    },
+    {
+      path: '/my-products',
+      name: 'my-products',
+      component: FinanceMyProductView
     },
   ]
 })

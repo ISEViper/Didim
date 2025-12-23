@@ -73,7 +73,7 @@ const handleLogout = async () => {
         
         <div class="p-8 border-b border-gray-200 dark:border-white/5">
           <div class="flex justify-between items-start mb-8">
-            <h1 class="text-3xl font-black tracking-tighter text-indigo-900 dark:text-white">DIDIM</h1>
+            <router-link to="/" class="text-3xl font-black tracking-tighter text-indigo-900 dark:text-white">DIDIM</router-link>
             <button @click="emit('close')" class="text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors transform hover:rotate-90 duration-200">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />

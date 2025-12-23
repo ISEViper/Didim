@@ -146,6 +146,14 @@ const selectPlace = (place) => {
   }
 }
 
+const handleLogout = async () => {
+  if (confirm("로그아웃 하시겠습니까?")) {
+    await authStore.logOut()
+    alert("로그아웃 되었습니다.")
+    router.push('/')
+  }
+}
+
 onMounted(async () => {
   try {
     await loadKakaoMap()
@@ -164,15 +172,40 @@ onMounted(async () => {
     <div class="fixed top-1/4 left-1/4 w-[500px] h-[500px] bg-indigo-400/20 rounded-full blur-[120px] -z-10 opacity-30 dark:bg-indigo-600/20 dark:opacity-40"></div>
     <div class="fixed bottom-1/4 right-1/4 w-[500px] h-[500px] bg-violet-400/20 rounded-full blur-[120px] -z-10 opacity-30 dark:bg-violet-600/20 dark:opacity-40"></div>
 
-    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 bg-white/0 dark:bg-[#0B0E14]/0 backdrop-blur-sm">
-      <button @click="router.back()" class="flex items-center gap-2 text-gray-500 hover:text-black dark:text-white dark:hover:text-white transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-        <span class="text-sm font-bold">돌아가기</span>
-      </button>
-      <div class="text-xl font-black tracking-tighter text-indigo-900 dark:text-white">DIDIM</div>
+  <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 transition-all duration-300">
+      
+      <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+        <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        
+        <h2 v-if="isLoggedIn" class="text-lg md:text-xl font-bold tracking-tight text-primary">
+          {{ username }}님, 안녕하세요.
+        </h2>
+      </div>
+
+      <div v-if="!isLoggedIn" class="flex justify-end gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+        <router-link to="/login" class="px-4 py-2 text-sm font-bold text-secondary hover:text-primary transition-colors">
+          로그인
+        </router-link>
+        <router-link to="/signup" class="px-5 py-2 text-sm font-bold bg-[#3b4cca] hover:bg-[#3241a8] text-white rounded-full transition-all shadow-lg shadow-indigo-500/30">
+          회원가입
+        </router-link>
+      </div>
+
+      <div v-else class="ml-auto flex items-center gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+        <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
+          로그아웃
+        </button>
+        <router-link to="/finance" class="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-indigo-900 to-indigo-600 dark:from-white dark:to-gray-400 hover:opacity-80 transition-opacity">
+          DIDIM
+        </router-link>
+      </div>
     </header>
+
+    <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
 
     <main class="flex-1 w-full max-w-7xl mx-auto px-4 pt-32 pb-12 z-10">
       

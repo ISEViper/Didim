@@ -18,14 +18,8 @@ const toggleMenu = () => {
 
 // 사용자 정보
 const isLoggedIn = computed(() => authStore.isAuthenticated)
-const displayName = computed(() => {
-  const user = authStore.user
-  if (user?.nickname) return user.nickname
-  if (user?.first_name) {
-    return user.last_name ? `${user.last_name}${user.first_name}` : user.first_name
-  }
-  return '사용자'
-})
+const username = computed(() => authStore.user?.nickname || `${authStore.user?.last_name || ''}${authStore.user?.first_name || ''}` || '사용자')
+
 
 // 검색 실행
 const handleSearch = () => {
@@ -80,7 +74,8 @@ const features = [
     <div class="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-600/20 rounded-full blur-[120px] -z-10 opacity-0 dark:opacity-60"></div>
 
     <!-- 헤더 -->
-    <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0">
+  <header class="w-full p-6 md:p-8 flex justify-between items-center z-50 fixed top-0 left-0 transition-all duration-300">
+      
       <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
         <button @click="toggleMenu" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -89,28 +84,29 @@ const features = [
         </button>
         
         <h2 v-if="isLoggedIn" class="text-lg md:text-xl font-bold tracking-tight text-primary">
-          {{ displayName }}님, 안녕하세요.
+          {{ username }}님, 안녕하세요.
         </h2>
       </div>
 
-      <div class="flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
-        <template v-if="isLoggedIn">
-          <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
-            로그아웃
-          </button>
-        </template>
-        <template v-else>
-          <router-link to="/login" class="px-4 py-2 text-sm font-bold text-secondary hover:text-primary transition-colors">
-            로그인
-          </router-link>
-          <router-link to="/signup" class="px-5 py-2 text-sm font-bold bg-[#3b4cca] hover:bg-[#3241a8] text-white rounded-full transition-all shadow-lg shadow-indigo-500/30">
-            회원가입
-          </router-link>
-        </template>
+      <div v-if="!isLoggedIn" class="flex justify-end gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+        <router-link to="/login" class="px-4 py-2 text-sm font-bold text-secondary hover:text-primary transition-colors">
+          로그인
+        </router-link>
+        <router-link to="/signup" class="px-5 py-2 text-sm font-bold bg-[#3b4cca] hover:bg-[#3241a8] text-white rounded-full transition-all shadow-lg shadow-indigo-500/30">
+          회원가입
+        </router-link>
+      </div>
+
+      <div v-else class="ml-auto flex items-center gap-6 animate-in fade-in slide-in-from-top-4 duration-500">
+        <button @click="handleLogout" class="text-sm text-secondary hover:text-primary transition-colors">
+          로그아웃
+        </button>
+        <router-link to="/" class="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-indigo-900 to-indigo-600 dark:from-white dark:to-gray-400 hover:opacity-80 transition-opacity">
+          DIDIM
+        </router-link>
       </div>
     </header>
 
-    <!-- 사이드바 -->
     <Sidebar :isOpen="isMenuOpen" @close="isMenuOpen = false" />
 
     <!-- 메인 컨텐츠 -->

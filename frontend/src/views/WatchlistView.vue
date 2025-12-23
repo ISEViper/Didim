@@ -132,7 +132,7 @@ const goToDetail = (ticker) => {
 
         <div v-else class="p-12 text-center text-secondary">
           <p class="text-lg mb-4">아직 관심 종목이 없습니다.</p>
-          <button @click="router.push('/')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg transition-transform active:scale-95">
+          <button @click="router.push('/stock')" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg transition-transform active:scale-95">
             종목 검색하러 가기
           </button>
         </div>
