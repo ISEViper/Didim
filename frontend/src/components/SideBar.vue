@@ -112,14 +112,19 @@ const handleLogout = async () => {
         </div>
 
         <nav class="flex-1 p-6 space-y-2 overflow-y-auto"> 
-        <router-link 
-          to="/ai-recommend" 
-          class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 transition-colors group"
-          @click="$emit('close')"
-        >
-          <span class="text-xl">🤖</span>
-          <span class="font-medium text-gray-300 group-hover:text-white transition-colors">AI 추천 리포트</span>
-        </router-link>          
+          <router-link 
+            to="/ai-recommend" 
+            @click="emit('close')" 
+            class="flex items-center gap-4 px-4 py-3 rounded-xl font-medium transition-all active:scale-95 group"
+            active-class="bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 font-bold"
+            :class="$route.path.includes('/ai-recommend') ? '' : 'text-gray-500 dark:text-gray-400 hover:text-indigo-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span>AI 추천 리포트</span>
+          </router-link>
+
           <router-link 
             to="/finance" 
             @click="emit('close')" 

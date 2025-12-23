@@ -109,68 +109,202 @@ const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
         <div class="relative perspective-1000 scroll-item delay-200 w-full max-w-6xl flex justify-center">
           <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-indigo-500/20 rounded-full blur-[120px] -z-10 animate-pulse"></div>
           
-          <div class="relative w-full max-w-4xl h-auto aspect-[16/9] md:h-[500px] flex justify-center items-center animate-float">
+          <div class="relative w-full max-w-5xl h-auto aspect-[16/9] md:h-[550px] flex justify-center items-center animate-float">
             
             <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-[95%] md:w-[85%] z-10">
                 <div class="bg-gray-900 border-[8px] md:border-[12px] border-gray-800 rounded-t-3xl rounded-b-xl shadow-2xl overflow-hidden aspect-video ring-1 ring-white/10 relative">
-                   <div class="w-full h-full bg-[#0B0E14] relative flex flex-col p-4 md:p-6">
-                      <div class="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
-                         <div class="flex gap-4 items-center">
-                            <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs">현</div>
-                            <div class="flex flex-col gap-1">
-                                <div class="w-24 h-4 bg-white/10 rounded"></div>
-                                <div class="w-16 h-3 bg-white/5 rounded"></div>
-                            </div>
+                   <div class="w-full h-full bg-[#0B0E14] relative flex flex-col p-4 md:p-6 overflow-hidden">
+                      <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-3">
+                         <div class="flex gap-2 items-center">
+                            <span class="text-xl">🤖</span>
+                            <div class="text-sm font-bold text-white">디딤 AI 금융 추천 리포트</div>
                          </div>
+                         <div class="px-3 py-1 bg-indigo-600 rounded text-[10px] text-white">다시 생성하기</div>
                       </div>
-                      <div class="flex gap-4 h-full">
-                         <div class="w-1/5 hidden md:flex flex-col gap-3">
-                             <div class="w-full h-8 bg-white/10 rounded-lg"></div>
-                             <div class="w-full h-8 bg-white/5 rounded-lg"></div>
-                             <div class="w-full h-8 bg-white/5 rounded-lg"></div>
-                         </div>
-                         <div class="flex-1 bg-gradient-to-br from-[#151530] to-[#0f172a] rounded-xl border border-white/10 p-6 relative overflow-hidden flex flex-col justify-between">
-                             <div>
-                                <div class="text-sm text-gray-400 mb-1">Total Assets</div>
-                                <div class="text-3xl md:text-4xl font-black text-white">₩ 128,400,000</div>
-                             </div>
-                            <div class="w-full h-24 relative mt-auto">
-                                <svg class="absolute bottom-0 w-full h-full text-indigo-500" viewBox="0 0 100 40" preserveAspectRatio="none">
-                                   <defs>
-                                     <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
-                                       <stop offset="0%" style="stop-color:rgb(99, 102, 241);stop-opacity:0.5" />
-                                       <stop offset="100%" style="stop-color:rgb(99, 102, 241);stop-opacity:0" />
-                                     </linearGradient>
-                                   </defs>
-                                   <path fill="url(#grad1)" stroke="none" d="M0,40 L0,30 Q20,20 40,30 T80,15 T100,5 L100,40 Z" />
-                                   <path fill="none" stroke="currentColor" stroke-width="2" d="M0,30 Q20,20 40,30 T80,15 T100,5" />
-                                </svg>
-                            </div>
-                         </div>
+                      
+                      <div class="flex-1 flex flex-col gap-4">
+                          <div class="grid grid-cols-3 gap-3">
+                              <div class="bg-[#1e1e45] rounded-lg p-3 border border-white/5">
+                                  <div class="text-[10px] text-gray-400">입출금/저축</div>
+                                  <div class="text-sm font-bold text-white">50,000,000원</div>
+                              </div>
+                              <div class="bg-[#1e1e45] rounded-lg p-3 border border-white/5">
+                                  <div class="text-[10px] text-gray-400">투자</div>
+                                  <div class="text-sm font-bold text-white">50,000,000원</div>
+                              </div>
+                              <div class="bg-[#1e1e45] rounded-lg p-3 border border-white/5">
+                                  <div class="text-[10px] text-gray-400">연봉</div>
+                                  <div class="text-sm font-bold text-white">45,000,000원</div>
+                              </div>
+                          </div>
+
+                          <div class="flex gap-4 flex-1">
+                              <div class="w-1/3 bg-[#1e1e45] rounded-lg p-4 border border-white/5 flex flex-col justify-center items-center text-center gap-2">
+                                  <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-xl shadow-lg">🚀</div>
+                                  <div class="text-sm font-bold text-white">적극투자형</div>
+                                  <div class="text-[10px] text-gray-400 leading-tight">수익성과 안정성의 균형을 추구하며<br>적극적인 수익을 목표로 합니다.</div>
+                              </div>
+                              <div class="flex-1 bg-[#1e1e45] rounded-lg p-4 border border-white/5 flex flex-col justify-center">
+                                  <div class="text-[10px] text-gray-400 mb-2">홍재 자산 분배 vs AI 추천</div>
+                                  
+                                  <div class="space-y-3">
+                                      <div>
+                                          <div class="flex justify-between text-[10px] text-gray-500 mb-1"><span>홍재</span><span>50% / 50%</span></div>
+                                          <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden flex">
+                                              <div class="w-1/2 bg-green-500"></div>
+                                              <div class="w-1/2 bg-red-400"></div>
+                                          </div>
+                                      </div>
+                                      <div>
+                                          <div class="flex justify-between text-[10px] text-indigo-300 mb-1"><span>AI 추천</span><span>40% / 60%</span></div>
+                                          <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden flex">
+                                              <div class="w-[40%] bg-green-500"></div>
+                                              <div class="w-[60%] bg-red-400 relative">
+                                                  <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="mt-3 text-[10px] text-gray-400 bg-black/20 p-2 rounded">
+                                      💡 공격적인 포트폴리오로 전환하여 기대 수익률을 높이는 것을 제안합니다.
+                                  </div>
+                              </div>
+                          </div>
                       </div>
                    </div>
                 </div>
                 <div class="mx-auto w-32 h-4 md:h-8 bg-gray-800 relative mt-[-2px] rounded-b-lg"></div>
             </div>
 
-            <div class="absolute -bottom-5 md:-bottom-10 right-0 md:right-10 w-[35%] md:w-[25%] z-20 animate-float-delayed">
-                <div class="bg-gray-800 border-[6px] md:border-[8px] border-gray-800 rounded-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden aspect-[3/5]">
-                    <div class="w-full h-full bg-[#0B0E14] relative flex flex-col p-4">
-                        <div class="flex justify-between items-center mb-4">
-                             <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xs font-bold">D</div>
-                             <div class="w-4 h-4 bg-white/20 rounded-full"></div>
+            <div class="absolute -bottom-8 md:-bottom-5 right-0 md:-right-12 w-[40%] md:w-[30%] z-20 animate-float-delayed">
+                <div class="bg-gray-800 border-[8px] border-gray-800 rounded-[1.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)] overflow-hidden aspect-[3/4] relative">
+                    <div class="absolute top-20 -right-[10px] w-[4px] h-10 bg-gray-700 rounded-r-md"></div>
+                    
+                    <div class="w-full h-full bg-[#151535] relative flex flex-col p-4">
+                        <div class="flex justify-between items-start mb-4">
+                             <div>
+                                 <div class="text-[10px] bg-indigo-600 text-white px-1.5 py-0.5 rounded w-fit mb-1">KOSPI</div>
+                                 <div class="text-lg font-bold text-white tracking-wide">******</div>
+                                 <div class="text-[10px] text-gray-400">******</div>
+                             </div>
+                             <div class="text-right">
+                                 <div class="text-xl font-bold text-red-500">36,300</div>
+                                 <div class="text-[10px] text-red-400">▲ 1,000 (+2.31%)</div>
+                             </div>
                         </div>
-                        <div class="flex-1 flex flex-col justify-center items-center gap-2">
-                             <div class="w-16 h-16 rounded-full border-4 border-indigo-500 flex items-center justify-center text-indigo-400 font-bold text-sm">+12%</div>
-                             <div class="text-white font-bold text-sm mt-2">수익률 분석</div>
-                             <div class="w-20 h-2 bg-white/10 rounded-full"></div>
+
+                        <div class="flex-1 w-full relative mb-4 bg-gradient-to-b from-transparent to-[#1e1e45]/50 rounded-lg">
+                             <svg class="w-full h-full p-2" viewBox="0 0 100 50" preserveAspectRatio="none">
+                                <path fill="none" stroke="#10b981" stroke-width="1.5" 
+                                      d="M0,40 L10,35 L20,38 L30,25 L40,28 L50,15 L60,18 L70,10 L80,12 L90,5 L100,8" />
+                                <path fill="url(#greenGrad)" stroke="none" opacity="0.2"
+                                      d="M0,40 L10,35 L20,38 L30,25 L40,28 L50,15 L60,18 L70,10 L80,12 L90,5 L100,8 V50 H0 Z" />
+                                <defs>
+                                    <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#10b981"/>
+                                        <stop offset="100%" stop-color="transparent"/>
+                                    </linearGradient>
+                                </defs>
+                             </svg>
                         </div>
-                        <div class="w-full h-10 bg-indigo-600 rounded-lg mt-auto"></div>
+
+                        <div class="bg-[#1e1e45] rounded-lg p-3 border border-white/5">
+                            <div class="flex items-center gap-1 mb-2">
+                                <span class="text-xs">⚡</span>
+                                <span class="text-[10px] font-bold text-white">디딤 AI 기업 요약</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex gap-2 items-start">
+                                    <div class="w-3 h-3 rounded-full bg-white/10 text-[8px] flex items-center justify-center text-white shrink-0">1</div>
+                                    <div class="text-[8px] text-gray-400 leading-tight">글로벌 반도체 시장 점유율 1위 유지...</div>
+                                </div>
+                                <div class="flex gap-2 items-start">
+                                    <div class="w-3 h-3 rounded-full bg-white/10 text-[8px] flex items-center justify-center text-white shrink-0">2</div>
+                                    <div class="text-[8px] text-gray-400 leading-tight">AI 반도체 수요 증가에 따른 HBM...</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
           </div>
+        </div>
+      </section>
+
+      <section class="min-h-[80vh] flex flex-col md:flex-row items-center justify-center gap-12 md:gap-24 px-6 md:px-20 py-24 bg-gray-50 dark:bg-[#0f172a] relative z-10">
+        
+        <div class="md:w-[50%] mt-12 md:mt-0 relative w-full h-auto aspect-square md:aspect-[4/3] flex items-center justify-center scroll-item">
+            <div class="relative w-full max-w-lg">
+                <div class="absolute inset-0 bg-indigo-500/30 blur-[60px] rounded-full"></div>
+                
+                <div class="relative bg-[#1e1e45] rounded-2xl border border-white/10 shadow-2xl p-6 md:p-8 overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-3">
+                             <div class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center text-xl shadow-lg shadow-blue-500/30">🧠</div>
+                             <div>
+                                 <div class="text-sm font-bold text-white">홍길동님의 투자 성향</div>
+                                 <div class="text-[10px] text-gray-400">AI 분석 완료</div>
+                             </div>
+                        </div>
+                        <div class="px-3 py-1 bg-purple-500/20 text-purple-300 text-[10px] rounded-full border border-purple-500/30">High Risk</div>
+                    </div>
+
+                    <div class="mb-6 relative h-4 bg-gray-700 rounded-full overflow-hidden">
+                        <div class="absolute left-0 top-0 h-full w-full bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 opacity-20"></div>
+                        <div class="absolute left-0 top-0 h-full w-[85%] bg-gradient-to-r from-green-500 via-yellow-500 to-red-600"></div>
+                        <div class="absolute top-1/2 -translate-y-1/2 left-[85%] w-3 h-3 bg-white rounded-full shadow-lg transform -translate-x-1.5"></div>
+                    </div>
+
+                    <div class="bg-[#151530] rounded-xl p-4 border border-indigo-500/30 mb-4">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xl">🚀</span>
+                            <span class="text-lg font-bold text-white">적극투자형</span>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            높은 금융 지식과 경험을 바탕으로 시장 평균 이상의 수익을 추구합니다. 변동성을 감내하며 장기적인 자산 증식을 목표로 합니다.
+                        </p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
+                            <div class="w-8 h-8 rounded bg-blue-500/20 flex items-center justify-center text-blue-400 text-xs">Stock</div>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-white">성장주 중심 포트폴리오</div>
+                                <div class="text-[10px] text-gray-500">IT, 바이오 섹터 비중 확대</div>
+                            </div>
+                            <div class="text-xs text-gray-400">→</div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors cursor-pointer">
+                            <div class="w-8 h-8 rounded bg-green-500/20 flex items-center justify-center text-green-400 text-xs">ETF</div>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-white">글로벌 반도체 ETF</div>
+                                <div class="text-[10px] text-gray-500">안정적인 우상향 기대</div>
+                            </div>
+                            <div class="text-xs text-gray-400">→</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute -right-4 -top-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg animate-bounce">
+                    AI 포트폴리오 생성 ✨
+                </div>
+            </div>
+        </div>
+
+        <div class="md:w-[40%] scroll-item delay-200 text-center md:text-left">
+          <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight text-gray-900 dark:text-white">
+            AI가 설계하는<br>
+            <span class="text-purple-500 dark:text-purple-400">나만의 포트폴리오</span>
+          </h2>
+          <p class="text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed">
+            투자 성향부터 자산 배분까지,<br>
+            디딤 AI가 당신에게 딱 맞는<br>
+            최적의 금융 솔루션을 제안합니다.
+          </p>
+          <button @click="router.push('/ai-recommend')" class="px-8 py-3 mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 dark:bg-white/10 text-white dark:text-white font-bold rounded-full hover:opacity-90 dark:hover:bg-white/20 transition-all shadow-lg">
+            디딤 AI 추천받기
+          </button>
         </div>
       </section>
 
@@ -187,7 +321,7 @@ const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
             한번에 끝낼 수 있어요.
           </p>
           <button @click="router.push('/finance')" class="px-8 py-3 mt-4 bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white font-bold rounded-full hover:bg-gray-300 dark:hover:bg-white/20 transition-colors">
-              상품 알아보러 가기
+              예적금 검색하기
           </button>
         </div>
 
@@ -225,8 +359,8 @@ const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
                    <div class="bg-[#1e1e45] rounded-[0.8rem] overflow-hidden aspect-[9/16] flex flex-col relative border border-white/10">
                        <div class="p-4 flex-1 flex flex-col">
                            <div class="text-[10px] text-indigo-400 font-bold mb-1">정기예금</div>
-                           <div class="text-xs text-gray-300 mb-1">경남은행</div>
-                           <div class="text-sm font-bold text-white mb-4 leading-tight">The파트너예금</div>
+                           <div class="text-xs text-gray-300 mb-1">OO은행</div>
+                           <div class="text-sm font-bold text-white mb-4 leading-tight">OOOO예금</div>
                            
                            <div class="bg-[#252550] rounded-lg p-2 mb-2 border border-indigo-500/30">
                                <div class="flex justify-between items-center">
@@ -274,10 +408,10 @@ const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
                                <div>
                                    <div class="flex items-center gap-2 mb-1">
                                        <span class="text-xs bg-indigo-600 text-white px-1 py-0.5 rounded-[2px]">KOSPI</span>
-                                       <span class="text-xl font-bold text-white">삼성전자</span>
-                                       <span class="text-xs text-gray-500">005930</span>
+                                       <span class="text-xl font-bold text-white">****</span>
+                                       <span class="text-xs text-gray-500">******</span>
                                    </div>
-                                   <div class="text-2xl font-bold text-blue-500">97,200원</div>
+                                   <div class="text-2xl font-bold text-blue-500">63,200원</div>
                                </div>
                                <div class="text-right">
                                    <div class="text-xs text-gray-400">전일대비</div>
@@ -381,27 +515,27 @@ const toggleMenu = () => isMenuOpen.value = !isMenuOpen.value
                                        </div>
                                    </div>
                                </div>
-                               <div class="text-sm text-gray-200 mb-3">OOO회사 주식을 지금 사는 것이 좋을까요?</div>
+                               <div class="text-sm text-gray-200 mb-3">***기술주 어떻게 생각하시나요?</div>
                                <div class="flex gap-3 text-gray-400 text-xs">
                                    <span>❤️ 20</span>
-                                   <span>💬 14</span>
+                                   <span>💬 13</span>
                                </div>
                            </div>
 
                            <div class="bg-[#252550] rounded-xl p-4 border border-white/5">
                                <div class="flex justify-between items-start mb-2">
                                    <div class="flex items-center gap-3">
-                                       <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">현</div>
+                                       <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">황</div>
                                        <div>
-                                           <div class="text-sm font-bold text-white">홍길동</div>
-                                           <div class="text-[10px] text-gray-400">1일 전</div>
+                                           <div class="text-sm font-bold text-white">황진이</div>
+                                           <div class="text-[10px] text-gray-400">19시간 전</div>
                                        </div>
                                    </div>
                                </div>
-                               <div class="text-sm text-gray-200 mb-3">OOO적금을 얼마나 드는 것이 좋을까요?</div>
+                               <div class="text-sm text-gray-200 mb-3">OOO적금 몇년 들어야 되는지 알려주세요.</div>
                                <div class="flex gap-3 text-gray-400 text-xs">
                                    <span>❤️ 10</span>
-                                   <span>💬 10</span>
+                                   <span>💬 5</span>
                                </div>
                            </div>
 
