@@ -8,7 +8,7 @@ from django.conf import settings
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import Plan, Subscription, Payment
 from .serializers import PlanSerializer, SubscriptionSerializer, PaymentSerializer
@@ -16,7 +16,7 @@ from .serializers import PlanSerializer, SubscriptionSerializer, PaymentSerializ
 # Create your views here.
 class PlanListView(APIView):
     """구독 플랜 목록 조회"""
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         plans = Plan.objects.filter(is_active=True)
@@ -32,7 +32,7 @@ class SubscriptionStatusView(APIView):
             subscription = Subscription.objects.get(user=request.user)
             serializer = SubscriptionSerializer(subscription)
             return Response({
-                'has_subcription': True,
+                'has_subscription': True,
                 'subscription': serializer.data
             })
         except Subscription.DoesNotExist:

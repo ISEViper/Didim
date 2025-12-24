@@ -25,8 +25,10 @@ class User(AbstractUser):
     
     def get_display_initial(self):
         """프로필 이미지가 없을 때 표시할 이니셜(이름 첫 글자)"""
+        if self.nickname:
+            return self.nickname[0].upper()
         if self.first_name:
             return self.first_name[0].upper()
         if self.nickname:
-            return self.nickname[0].upper()
-        return self.username[0].upper()
+            return self.last_name[0].upper()
+        return '?'

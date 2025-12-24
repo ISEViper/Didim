@@ -202,7 +202,7 @@ onMounted(async () => {
         <!-- 플랜 안내 (구독 중이 아닐 때만) -->
         <div v-if="!isSubscriptionActive && plan" class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-6 mb-6 shadow-xl">
           <div class="text-center">
-            <h2 class="text-2xl font-bold text-white mb-2">{{ plan.name }} 플랜</h2>
+            <h2 class="text-2xl font-bold text-white mb-2">{{ plan.name }}</h2>
             <p class="text-indigo-200 mb-4">{{ plan.description }}</p>
             
             <div class="mb-6">

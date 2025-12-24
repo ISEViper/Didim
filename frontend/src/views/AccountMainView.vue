@@ -36,7 +36,7 @@ const isPremium = computed(() => user.value?.is_premium || false)
 // 구독 플랜 이름
 const subscriptionPlanName = computed(() => {
   if (user.value?.subscription_status?.plan_name) {
-    return user.value.subscription_status.plan_name + ' 플랜'
+    return user.value.subscription_status.plan_name
   }
   return null
 })

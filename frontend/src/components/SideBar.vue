@@ -20,14 +20,15 @@ const user = computed(() => authStore.user)
 // 닉네임 표시 로직
 const username = computed(() => user.value?.nickname || `${user.value?.last_name || ''}${user.value?.first_name || ''}` || '사용자')
 
-// [추가] 프로필 이미지 URL
+// 프로필 이미지 URL
 const profileImageUrl = computed(() => user.value?.profile_image_url || null)
 
-// [추가] 이미지가 없을 때 보여줄 이니셜
+// 이미지가 없을 때 보여줄 이니셜
 const displayInitial = computed(() => {
   if (user.value?.display_initial) return user.value.display_initial
-  if (user.value?.first_name) return user.value.first_name[0].toUpperCase()
   if (user.value?.nickname) return user.value.nickname[0].toUpperCase()
+  if (user.value?.first_name) return user.value.first_name[0].toUpperCase()
+  if (user.value?.last_name) return user.value.last_name[0].toUpperCase()
   return '?'
 })
 
@@ -38,6 +39,17 @@ const handleLogout = async () => {
     router.go(0)
   }
 }
+
+// 프리미엄 구독 여부
+const isPremium = computed(() => user.value?.is_premium || false)
+
+// 구독 플랜 이름
+const subscriptionPlanName = computed(() => {
+  if (user.value?.subscription_status?.plan_name) {
+    return user.value.subscription_status.plan_name
+  }
+  return null
+})
 </script>
 
 <template>
@@ -93,9 +105,30 @@ const handleLogout = async () => {
                 {{ displayInitial }}
               </span>
             </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900 dark:text-white leading-tight mb-1">{{ username }}님,</p>
-              <p class="text-sm text-gray-500 dark:text-gray-400">금융 생활의 든든한 디딤돌이 되어 드릴께요.</p>
+            <div class="flex flex-col items-start w-full">
+              
+              <div class="mb-2"> <p class="text-lg font-bold text-gray-900 dark:text-white leading-tight mb-1">
+                  {{ username }}님,
+                </p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  금융 생활의 든든한 디딤돌이<br /> 되어드릴게요.
+                </p>
+              </div>
+
+              <div class="w-full"> <span 
+                  v-if="isPremium"
+                  class="inline-block text-center px-3 py-1 text-xs font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full shadow-lg shadow-indigo-500/30"
+                >
+                  {{ subscriptionPlanName || '프리미엄 플랜' }}
+                </span>
+
+                <span 
+                  v-else
+                  class="inline-block text-center px-3 py-1 text-xs font-bold bg-gray-500 text-white rounded-full"
+                >
+                  무료 플랜
+                </span>
+              </div>
             </div>
           </div>
 

@@ -5,7 +5,7 @@ class PlanSerializer(serializers.ModelSerializer):
     """플랜 정보 시리얼라이저"""
     class Meta:
         model = Plan
-        fields = ['id', 'name', 'price', 'duration_days', 'description']
+        fields = ['id', 'name', 'price', 'duration_days', 'description', 'is_active']
 
     
 class SubscriptionSerializer(serializers.ModelSerializer):
