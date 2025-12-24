@@ -1,31 +1,29 @@
-# 파일명: docker-compose-aws.yml (AWS 서버용)
 services:
   backend:
-    build:
-      context: ./backend
-    container_name: didim-backend
-    restart: always  
+    build: ./backend
+    container_name: didim_backend
+    restart: always
     volumes:
-      - ./backend/db.sqlite3:/app/db.sqlite3
+      - ./backend/db.sqlite3:/app/db.sqlite3 # 로컬 DB 동기화
+      - static_volume:/app/staticfiles
       - media_volume:/app/media
     env_file:
-      - ./backend/.env
-    expose:
-      - "8000"    
+      - ./backend/.env # 환경변수 파일 (Secret Key 등)
 
-  frontend:
+  nginx:
     build:
-      context: ./frontend
-    container_name: didim-frontend
-    restart: always        
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    container_name: didim_nginx
+    restart: always
     ports:
-      - "80:80"            
+      - "80:80"
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
     depends_on:
       - backend
-    volumes:
-      - media_volume:/app/media
-    env_file:
-      - ./frontend/.env
 
 volumes:
+  static_volume:
   media_volume:

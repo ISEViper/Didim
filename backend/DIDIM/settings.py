@@ -8,7 +8,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = "django-insecure-gf*3pqan1f$tw+li%b)h$tf(11rdf151oslqd#$d205jao-h!$"
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '15.165.110.244']
 
 INSTALLED_APPS = [
     'accounts',
@@ -50,6 +50,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost",
+    "http://15.165.110.244"
 ]
 
 SITE_ID = 1
