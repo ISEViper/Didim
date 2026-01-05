@@ -21,8 +21,8 @@
 
 | 이름 | 역할 | 담당 업무 상세 |
 | :--- | :--- | :--- |
-| **현광수** | **팀장, FR, Design** | • **Frontend**: Vue.js 3, Pinia 상태 관리, 컴포넌트 설계 및 구현<br>• **Design**: Figma 와이어프레임 제작 및 UI/UX 디자인<br>• **Feature**: 주식/ETF 차트 시각화(Chart.js), 종목 검색 및 상세 정보, 뉴스 크롤링<br>• **Deployment**: 프론트엔드 배포 및 최적화 |
-| **공재국** | **Backend, AI, API** | • **Backend**: Django REST Framework API 설계 및 구축<br>• **Feature**: 회원가입/인증(JWT, 소셜), 예적금 비교, 커뮤니티, 구독 결제(Toss)<br>• **AI**: Gemini 프롬프트 엔지니어링, 추천 알고리즘 구현, 모델 이원화 설계<br>• **DB**: ERD 설계, 금융감독원/한국거래소 데이터 수집 및 전처리 |
+| **현광수** | **팀장, Fullstack, Design** | • **Frontend**: Vue.js 3, Pinia 상태 관리, 컴포넌트 설계 및 구현<br>• **Design**: Figma 와이어프레임 제작 및 UI/UX 디자인<br>• **Feature**: 주식/ETF 차트 시각화(Chart.js), 종목 검색 및 상세 정보, 뉴스 크롤링<br>• **Deployment**: 프론트엔드/백엔드 AWS EC2 배포 및 최적화 <br>• **DB**: ERD 설계, 금융감독원/한국거래소 데이터 수집 및 전처리  |
+| **공재국** | **Backend, AI, API** | • **Backend**: Django REST Framework API 설계 및 구축<br>• **Feature**: 회원가입/인증(JWT, 소셜), 예적금 비교, 커뮤니티, 구독 결제(Toss)<br>• **AI**: Gemini 프롬프트 엔지니어링, 추천 알고리즘 구현, 모델 이원화 설계|
 
 <br>
 
